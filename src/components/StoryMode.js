@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import NoSleep from "nosleep.js";
 
 // Unique entrance transition per slide — cycles through 8 styles
 const SLIDE_VARIANTS = [
@@ -163,14 +164,11 @@ export default function StoryMode({ photos, startIndex = 0, onClose }) {
     return () => { window.removeEventListener("keydown", fn); document.body.style.overflow = ""; };
   }, [onClose, goNext, goPrev]);
 
-  // Keep screen awake while story plays — same as video players
+  // Keep screen awake while story plays — covers iOS Safari + Android Chrome
   useEffect(() => {
-    if (!("wakeLock" in navigator)) return;
-    let lock = null;
-    navigator.wakeLock.request("screen")
-      .then(l => { lock = l; })
-      .catch(() => {}); // silently fail if browser denies
-    return () => { if (lock) lock.release(); };
+    const noSleep = new NoSleep();
+    noSleep.enable();
+    return () => noSleep.disable();
   }, []);
 
   // Touch swipe
