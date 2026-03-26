@@ -16,13 +16,12 @@ export default function App() {
   const [autoPlayStory,  setAutoPlayStory]  = useState(false);
   const [celebrating,    setCelebrating]    = useState(false);
   const [showSurprise,   setShowSurprise]   = useState(false);
-  const [showPlane, setShowPlane] = useState(!locked); // visible as soon as page is unlocked
+  const [showPlane, setShowPlane] = useState(false); // appears only after story is closed
 
   const handleUnlocked = () => {
     setLocked(false);
     setTimeout(() => setShowConfetti(true), 300);
     setTimeout(() => setShowConfetti(false), 8700);
-    setTimeout(() => setShowPlane(true), 1500); // plane appears shortly after unlock
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -46,6 +45,7 @@ export default function App() {
 
   const handleAutoPlayDone = () => {
     setAutoPlayStory(false);
+    setTimeout(() => setShowPlane(true), 800); // plane appears after story is closed
   };
 
   return (
