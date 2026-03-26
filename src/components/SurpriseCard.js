@@ -1,162 +1,244 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const TOTAL = 5;
+const SCRATCH_THRESHOLD = 0.52; // 52% scratched → auto-reveal
 
 export default function SurpriseCard({ active, onDone }) {
-  const [count,    setCount]    = useState(TOTAL);
-  const [visible,  setVisible]  = useState(false);
-  const doneCalledRef = useRef(false);
+  const canvasRef   = useRef(null);
+  const [revealed,  setRevealed]  = useState(false);
+  const [visible,   setVisible]   = useState(false);
+  const isDrawing   = useRef(false);
+  const doneRef     = useRef(false);
 
+  // Show/hide card
   useEffect(() => {
     if (!active) {
-      setCount(TOTAL);
       setVisible(false);
-      doneCalledRef.current = false;
+      setRevealed(false);
+      doneRef.current = false;
       return;
     }
-
-    doneCalledRef.current = false;
-    setCount(TOTAL);
     setVisible(true);
+    setRevealed(false);
+    doneRef.current = false;
+  }, [active]);
 
-    // Use Date-based countdown — immune to JS timer drift from canvas load
-    const startTime = Date.now();
-    const id = setInterval(() => {
-      const elapsed = Math.floor((Date.now() - startTime) / 1000);
-      const remaining = TOTAL - elapsed;
+  // Draw scratch surface once card is visible
+  useEffect(() => {
+    if (!visible) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    const W = canvas.width, H = canvas.height;
 
-      if (remaining <= 0) {
-        clearInterval(id);
-        setCount(0);
-        if (!doneCalledRef.current) {
-          doneCalledRef.current = true;
-          // Exit animation then fire onDone
-          setVisible(false);
-          setTimeout(() => onDone(), 600);
-        }
-      } else {
-        setCount(remaining);
-      }
-    }, 200); // check every 200ms — much more responsive than 1000ms
+    // Gradient scratch surface (gold → pink, like a lottery card)
+    const grad = ctx.createLinearGradient(0, 0, W, H);
+    grad.addColorStop(0,   "#E8C97A");
+    grad.addColorStop(0.4, "#D4A857");
+    grad.addColorStop(0.7, "#E8A0B0");
+    grad.addColorStop(1,   "#C8707A");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
 
-    return () => clearInterval(id);
-  }, [active]); // eslint-disable-line
+    // Coin-texture dots
+    ctx.fillStyle = "rgba(255,255,255,0.12)";
+    for (let i = 0; i < 120; i++) {
+      const x = Math.random() * W, y = Math.random() * H;
+      ctx.beginPath();
+      ctx.arc(x, y, Math.random() * 3 + 1, 0, Math.PI * 2);
+      ctx.fill();
+    }
 
-  // SVG ring
-  const radius   = 38;
-  const circ     = 2 * Math.PI * radius;
-  const offset   = circ * (count / TOTAL); // full at TOTAL, empty at 0
+    // "SCRATCH HERE" text
+    ctx.fillStyle = "rgba(255,255,255,0.55)";
+    ctx.font      = "bold 16px 'Georgia', serif";
+    ctx.textAlign = "center";
+    ctx.fillText("✦  SCRATCH HERE  ✦", W / 2, H / 2 - 10);
+    ctx.font      = "13px 'Georgia', serif";
+    ctx.fillStyle = "rgba(255,255,255,0.4)";
+    ctx.fillText("🎁 a surprise awaits", W / 2, H / 2 + 16);
+  }, [visible]);
+
+  // Check how much has been scratched
+  const checkReveal = useCallback(() => {
+    if (doneRef.current) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx   = canvas.getContext("2d", { willReadFrequently: true });
+    const data  = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+    let transparent = 0;
+    for (let i = 3; i < data.length; i += 4) {
+      if (data[i] < 128) transparent++;
+    }
+    const pct = transparent / (canvas.width * canvas.height);
+    if (pct >= SCRATCH_THRESHOLD) {
+      doneRef.current = true;
+      setRevealed(true);
+      setTimeout(() => {
+        setVisible(false);
+        setTimeout(onDone, 500);
+      }, 900);
+    }
+  }, [onDone]);
+
+  // Scratch drawing
+  const scratchAt = useCallback((x, y) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    ctx.globalCompositeOperation = "destination-out";
+    ctx.beginPath();
+    ctx.arc(x, y, 28, 0, Math.PI * 2);
+    ctx.fill();
+    checkReveal();
+  }, [checkReveal]);
+
+  const getXY = (e) => {
+    const canvas = canvasRef.current;
+    const rect   = canvas.getBoundingClientRect();
+    const scaleX = canvas.width  / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const src    = e.touches ? e.touches[0] : e;
+    return {
+      x: (src.clientX - rect.left) * scaleX,
+      y: (src.clientY - rect.top)  * scaleY,
+    };
+  };
+
+  const onMouseDown  = (e) => { isDrawing.current = true;  scratchAt(...Object.values(getXY(e))); };
+  const onMouseMove  = (e) => { if (!isDrawing.current) return; scratchAt(...Object.values(getXY(e))); };
+  const onMouseUp    = ()  => { isDrawing.current = false; };
+  const onTouchStart = (e) => { e.preventDefault(); isDrawing.current = true;  scratchAt(...Object.values(getXY(e))); };
+  const onTouchMove  = (e) => { e.preventDefault(); if (!isDrawing.current) return; scratchAt(...Object.values(getXY(e))); };
+  const onTouchEnd   = ()  => { isDrawing.current = false; };
 
   return (
     <AnimatePresence>
       {visible && (
         <motion.div
-          key="surprise-backdrop"
+          key="scratch-backdrop"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4 }}
-          className="fixed inset-0 z-[400] flex items-center justify-center px-4"
-          style={{ pointerEvents: "none" }}
+          className="fixed inset-0 z-[400] flex items-center justify-center px-5"
+          style={{ background: "rgba(20,8,8,0.88)", backdropFilter: "blur(12px)" }}
         >
           <motion.div
-            initial={{ scale: 0.75, y: 50, opacity: 0 }}
-            animate={{ scale: 1,    y: 0,  opacity: 1 }}
+            initial={{ scale: 0.8, y: 40, opacity: 0 }}
+            animate={{ scale: 1,   y: 0,  opacity: 1 }}
             exit={{   scale: 0.9,  y: -20, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 260, damping: 24 }}
-            className="flex flex-col items-center gap-4 px-10 py-8 rounded-3xl text-center"
-            style={{
-              background:     "linear-gradient(135deg, rgba(255,240,250,0.96), rgba(248,220,238,0.97))",
-              backdropFilter: "blur(20px)",
-              border:         "1.5px solid rgba(220,150,175,0.35)",
-              boxShadow:      "0 30px 70px rgba(180,80,120,0.2), 0 4px 16px rgba(0,0,0,0.06)",
-              maxWidth:       340,
-              width:          "100%",
-            }}
+            transition={{ type: "spring", stiffness: 240, damping: 22 }}
+            className="flex flex-col items-center gap-4 text-center"
+            style={{ width: "100%", maxWidth: 340 }}
           >
-            {/* Sparkle corners — CSS animation, not Framer Motion */}
-            <span className="absolute top-3 left-4 text-base animate-pulse">✨</span>
-            <span className="absolute top-3 right-4 text-base animate-pulse" style={{ animationDelay: "0.4s" }}>✨</span>
-            <span className="absolute bottom-3 left-4 text-base animate-pulse" style={{ animationDelay: "0.8s" }}>✨</span>
-            <span className="absolute bottom-3 right-4 text-base animate-pulse" style={{ animationDelay: "1.2s" }}>✨</span>
-
-            {/* Bouncing gift */}
-            <div
-              className="text-5xl"
-              style={{ animation: "giftBounce 1.8s ease-in-out infinite" }}
+            {/* Header */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
             >
-              🎁
-            </div>
-
-            {/* Text */}
-            <div>
-              <p className="font-body text-xs uppercase tracking-[0.25em] text-[#C8848C] mb-1">
-                Get ready
+              <p className="font-body text-xs uppercase tracking-[0.3em] text-[#E8D5D5]/60 mb-1">
+                A surprise for you
               </p>
               <h3
-                className="font-display italic font-bold text-[#4A2A2A] leading-snug"
-                style={{ fontSize: "clamp(1.15rem, 4vw, 1.4rem)" }}
+                className="font-display italic font-bold text-[#F8F1F1]"
+                style={{ fontSize: "clamp(1.2rem, 5vw, 1.6rem)" }}
               >
-                A surprise is waiting for you
+                {revealed ? "🎬 Enjoy your story!" : "Scratch to reveal 🎁"}
               </h3>
-              <p className="font-body text-sm text-[#8B5E5E]/75 mt-1">
-                Your story begins in…
-              </p>
-            </div>
+            </motion.div>
 
-            {/* Circular countdown — CSS transition on strokeDashoffset */}
-            <div className="relative flex items-center justify-center" style={{ width: 100, height: 100 }}>
-              <svg
-                width="100" height="100"
-                style={{ transform: "rotate(-90deg)", position: "absolute", top: 0, left: 0 }}
-              >
-                {/* Track */}
-                <circle cx="50" cy="50" r={radius} fill="none"
-                  stroke="rgba(200,150,175,0.18)" strokeWidth="6" />
-                {/* Animated ring — pure CSS transition, GPU-accelerated */}
-                <circle
-                  cx="50" cy="50" r={radius}
-                  fill="none"
-                  stroke="url(#rg)"
-                  strokeWidth="6"
-                  strokeLinecap="round"
-                  strokeDasharray={circ}
-                  strokeDashoffset={offset}
-                  style={{ transition: "stroke-dashoffset 0.9s ease-in-out" }}
-                />
-                <defs>
-                  <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%"   stopColor="#F472B6" />
-                    <stop offset="100%" stopColor="#A855F7" />
-                  </linearGradient>
-                </defs>
-              </svg>
-
-              {/* Number — plain CSS transition, no Framer Motion */}
-              <span
-                key={count}
-                className="font-display font-bold text-[#4A2A2A]"
+            {/* Scratch card */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.45, type: "spring", stiffness: 200 }}
+              className="relative rounded-2xl overflow-hidden"
+              style={{
+                width: "100%", height: 180,
+                boxShadow: "0 8px 40px rgba(200,120,140,0.35), 0 2px 8px rgba(0,0,0,0.2)",
+              }}
+            >
+              {/* Reveal layer — shown underneath */}
+              <div
+                className="absolute inset-0 flex flex-col items-center justify-center gap-3"
                 style={{
-                  fontSize: "2.2rem",
-                  lineHeight: 1,
-                  transition: "opacity 0.15s ease",
+                  background: "linear-gradient(135deg, #FDE8F0, #F7CAC9)",
                 }}
               >
-                {count === 0 ? "🎬" : count}
-              </span>
-            </div>
+                <motion.span
+                  animate={revealed ? { scale: [1, 1.4, 1], rotate: [0, -10, 10, 0] } : {}}
+                  transition={{ duration: 0.6 }}
+                  className="text-5xl"
+                >
+                  🎬
+                </motion.span>
+                <p className="font-display italic font-bold text-[#4A2A2A] text-lg">
+                  Your story awaits!
+                </p>
+                <p className="font-body text-xs text-[#8B5E5E]/80 tracking-wide uppercase">
+                  20 photos · just for you
+                </p>
+              </div>
 
-            {/* Pulse dots */}
-            <div className="flex gap-2">
-              {[0, 1, 2].map(i => (
-                <div
-                  key={i}
-                  className="w-2 h-2 rounded-full bg-[#D4848C]"
-                  style={{ animation: `pulse 1s ease-in-out ${i * 0.2}s infinite` }}
+              {/* Scratch canvas — sits on top */}
+              {!revealed && (
+                <canvas
+                  ref={canvasRef}
+                  width={680}
+                  height={360}
+                  className="absolute inset-0 w-full h-full"
+                  style={{ cursor: "crosshair", touchAction: "none" }}
+                  onMouseDown={onMouseDown}
+                  onMouseMove={onMouseMove}
+                  onMouseUp={onMouseUp}
+                  onMouseLeave={onMouseUp}
+                  onTouchStart={onTouchStart}
+                  onTouchMove={onTouchMove}
+                  onTouchEnd={onTouchEnd}
                 />
-              ))}
-            </div>
+              )}
+
+              {/* Revealed sparkle overlay */}
+              <AnimatePresence>
+                {revealed && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="absolute inset-0 pointer-events-none flex items-center justify-center"
+                  >
+                    {["✨","🌟","💖","⭐","🎉"].map((s, i) => (
+                      <motion.span
+                        key={i}
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: [0, 1.5, 1], opacity: [0, 1, 0] }}
+                        transition={{ duration: 0.8, delay: i * 0.1 }}
+                        className="absolute text-xl pointer-events-none"
+                        style={{
+                          left: `${15 + i * 18}%`,
+                          top:  i % 2 === 0 ? "20%" : "65%",
+                        }}
+                      >
+                        {s}
+                      </motion.span>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+
+            {/* Hint */}
+            {!revealed && (
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.9 }}
+                className="font-body text-[0.7rem] text-[#E8D5D5]/40 tracking-widest uppercase"
+              >
+                Use your finger to scratch ✦
+              </motion.p>
+            )}
           </motion.div>
         </motion.div>
       )}
