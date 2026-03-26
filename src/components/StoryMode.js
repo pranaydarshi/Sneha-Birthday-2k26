@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Unique entrance transition per slide — cycles through 6 styles
+// Unique entrance transition per slide — cycles through 8 styles
 const SLIDE_VARIANTS = [
   // 0 — Slide from right
   {
@@ -10,39 +10,53 @@ const SLIDE_VARIANTS = [
     exit:    { x: "-100%",opacity: 0 },
     transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
   },
-  // 1 — Zoom + fade (scale from 1.12 down)
+  // 1 — Circle iris expand from centre ✦ (inside → outside)
   {
-    initial: { scale: 1.14, opacity: 0 },
-    animate: { scale: 1,    opacity: 1 },
-    exit:    { scale: 0.9,  opacity: 0 },
-    transition: { duration: 0.6, ease: "easeOut" },
+    initial: { clipPath: "circle(0% at 50% 50%)",   opacity: 1 },
+    animate: { clipPath: "circle(150% at 50% 50%)",  opacity: 1 },
+    exit:    { clipPath: "circle(0% at 50% 50%)",   opacity: 1 },
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
   },
-  // 2 — Slide from left
+  // 2 — Vertical: current drops down, next falls from top ✦
+  {
+    initial: { y: "-100%", opacity: 0 },
+    animate: { y: "0%",    opacity: 1 },
+    exit:    { y: "100%",  opacity: 0 },
+    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+  },
+  // 3 — Blur dissolve
+  {
+    initial: { opacity: 0, filter: "blur(22px)", scale: 1.05 },
+    animate: { opacity: 1, filter: "blur(0px)",  scale: 1    },
+    exit:    { opacity: 0, filter: "blur(18px)", scale: 0.97 },
+    transition: { duration: 0.65, ease: "easeInOut" },
+  },
+  // 4 — Slide from left
   {
     initial: { x: "-100%", opacity: 0 },
     animate: { x: "0%",    opacity: 1 },
     exit:    { x: "100%",  opacity: 0 },
     transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
   },
-  // 3 — Slide up
+  // 5 — Circle iris expand from bottom-centre ✦
   {
-    initial: { y: "60px", opacity: 0 },
-    animate: { y: "0px",  opacity: 1 },
-    exit:    { y: "-40px",opacity: 0 },
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+    initial: { clipPath: "circle(0% at 50% 100%)",  opacity: 1 },
+    animate: { clipPath: "circle(150% at 50% 100%)", opacity: 1 },
+    exit:    { clipPath: "circle(0% at 50% 0%)",    opacity: 1 },
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
   },
-  // 4 — Blur dissolve
+  // 6 — Zoom + fade
   {
-    initial: { opacity: 0, filter: "blur(20px)", scale: 1.04 },
-    animate: { opacity: 1, filter: "blur(0px)",  scale: 1    },
-    exit:    { opacity: 0, filter: "blur(16px)", scale: 0.97 },
-    transition: { duration: 0.65, ease: "easeInOut" },
+    initial: { scale: 1.15, opacity: 0 },
+    animate: { scale: 1,    opacity: 1 },
+    exit:    { scale: 0.9,  opacity: 0 },
+    transition: { duration: 0.6, ease: "easeOut" },
   },
-  // 5 — Diagonal slide (right+up)
+  // 7 — Vertical reverse: current goes up, next comes from bottom
   {
-    initial: { x: "60px",  y: "40px",  opacity: 0 },
-    animate: { x: "0px",   y: "0px",   opacity: 1 },
-    exit:    { x: "-60px", y: "-40px", opacity: 0 },
+    initial: { y: "100%",  opacity: 0 },
+    animate: { y: "0%",    opacity: 1 },
+    exit:    { y: "-100%", opacity: 0 },
     transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
   },
 ];
