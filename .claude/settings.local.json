@@ -6,7 +6,15 @@
       "Bash(taskkill /PID 39696 /F)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001)",
       "Bash(gh --version)",
-      "Bash(git --version)"
+      "Bash(git --version)",
+      "Bash(du -sh c:Userssai pranayDesktopSaiS_Giftpublicphotos/*)",
+      "Bash(powershell -command \"Get-ChildItem ''c:\\\\Users\\\\sai pranay\\\\Desktop\\\\Sai\\\\S_Gift\\\\public\\\\photos'' | Select-Object Name, @{N=''SizeMB'';E={[math]::Round\\($_Length/1MB,2\\)}} | Sort-Object SizeMB -Descending | Format-Table -AutoSize\")",
+      "Bash(powershell -command \"Get-ChildItem ''C:/Users/sai pranay/Desktop/Sai/S_Gift/public/photos'' | ForEach-Object { Write-Host $_Name, \\([math]::Round\\($_Length/1KB\\)\\) ''KB'' } | Sort-Object\")",
+      "Bash(cmd /c \"dir /o-s C:\\\\Users\\\\sai pranay\\\\Desktop\\\\Sai\\\\S_Gift\\\\public\\\\photos\")",
+      "Bash(cmd /c dir /o-s \"C:\\\\Users\\\\sai pranay\\\\Desktop\\\\Sai\\\\S_Gift\\\\public\\\\photos\")",
+      "Bash(node -e \"require\\(''sharp''\\)\")",
+      "Bash(npm install:*)",
+      "Bash(node compress-images.js)"
     ]
   }
 }
