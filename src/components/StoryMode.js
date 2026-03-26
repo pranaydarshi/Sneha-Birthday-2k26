@@ -163,6 +163,16 @@ export default function StoryMode({ photos, startIndex = 0, onClose }) {
     return () => { window.removeEventListener("keydown", fn); document.body.style.overflow = ""; };
   }, [onClose, goNext, goPrev]);
 
+  // Keep screen awake while story plays — same as video players
+  useEffect(() => {
+    if (!("wakeLock" in navigator)) return;
+    let lock = null;
+    navigator.wakeLock.request("screen")
+      .then(l => { lock = l; })
+      .catch(() => {}); // silently fail if browser denies
+    return () => { if (lock) lock.release(); };
+  }, []);
+
   // Touch swipe
   const touchStart = useRef(null);
   const onTouchStart = e => { touchStart.current = e.touches[0].clientX; };
