@@ -204,9 +204,18 @@ export default function StoryMode({ photos, startIndex = 0, onClose }) {
         </div>
       </div>
 
+      {/* Preload next image so transition never waits on network */}
+      {index < photos.length - 1 && (
+        <link
+          rel="preload"
+          as="image"
+          href={photos[index + 1].src}
+        />
+      )}
+
       {/* ── Ken Burns photo ── */}
       <div className="absolute inset-0 overflow-hidden">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="sync">
           <motion.div
             key={index}
             className="absolute inset-0"
@@ -224,6 +233,7 @@ export default function StoryMode({ photos, startIndex = 0, onClose }) {
                 className="w-full h-full object-cover object-top"
                 style={{ filter: "blur(24px)", opacity: 0.65 }}
                 draggable={false}
+                loading="eager"
               />
             </div>
 
@@ -239,6 +249,8 @@ export default function StoryMode({ photos, startIndex = 0, onClose }) {
                 alt={photo.alt}
                 className="w-full h-full object-contain"
                 draggable={false}
+                loading="eager"
+                decoding="async"
               />
             </motion.div>
 

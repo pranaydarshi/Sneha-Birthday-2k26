@@ -179,6 +179,8 @@ export default function BirthdayCake({ onCelebrate }) {
         <motion.img
           src="/photos/birthday-cake.jpg"
           alt="Birthday cake"
+          fetchpriority="high"
+          decoding="async"
           className="w-full rounded-3xl"
           style={{
             boxShadow: "0 20px 60px rgba(200,100,130,0.25), 0 8px 20px rgba(0,0,0,0.1)",

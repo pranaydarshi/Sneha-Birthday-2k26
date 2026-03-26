@@ -57,6 +57,7 @@ function PolaroidCard({ photo, index, onOpenLightbox, onOpenStory }) {
             src={photo.thumb}
             alt={photo.alt}
             loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover object-top"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.35 }}
