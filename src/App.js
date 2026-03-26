@@ -7,6 +7,7 @@ import LockScreen          from "./components/LockScreen";
 import FallingCelebration  from "./components/FallingCelebration";
 import LetterModal         from "./components/LetterModal";
 import SurpriseCard        from "./components/SurpriseCard";
+import TeaserCard          from "./components/TeaserCard";
 
 const UNLOCK_TIME = Date.now() + 10 * 1000; // TEST MODE — change back to April 4 before sharing
 
@@ -16,8 +17,9 @@ export default function App() {
   const [autoPlayStory,  setAutoPlayStory]  = useState(false);
   const [celebrating,    setCelebrating]    = useState(false);
   const [showSurprise,   setShowSurprise]   = useState(false);
-  const [showPlane,  setShowPlane]  = useState(false);
-  const [openLetter, setOpenLetter] = useState(false);
+  const [showPlane,   setShowPlane]   = useState(false);
+  const [showTeaser,  setShowTeaser]  = useState(false);
+  const [openLetter,  setOpenLetter]  = useState(false);
 
   const handleUnlocked = () => {
     setLocked(false);
@@ -46,8 +48,7 @@ export default function App() {
 
   const handleAutoPlayDone = () => {
     setAutoPlayStory(false);
-    setOpenLetter(true);                    // letter opens as the final surprise
-    setTimeout(() => setShowPlane(true), 800); // plane appears after, for re-reading
+    setShowTeaser(true); // teaser card first, then letter
   };
 
   return (
@@ -58,6 +59,14 @@ export default function App() {
       <SurpriseCard
         active={showSurprise}
         onDone={() => { setShowSurprise(false); setAutoPlayStory(true); }}
+      />
+      <TeaserCard
+        active={showTeaser}
+        onDone={() => {
+          setShowTeaser(false);
+          setOpenLetter(true);
+          setTimeout(() => setShowPlane(true), 2000);
+        }}
       />
       <LetterModal showPlane={showPlane} autoOpen={openLetter} />
       <Navbar />
