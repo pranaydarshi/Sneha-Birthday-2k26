@@ -151,6 +151,13 @@ export default function StoryMode({ photos, startIndex = 0, onClose }) {
     setProgress(0);
   }, [index]);
 
+  // Preload next (and next+1) images via JS so they're in cache before transition
+  useEffect(() => {
+    const preload = (src) => { const img = new Image(); img.src = src; };
+    if (index + 1 < photos.length) preload(photos[index + 1].src);
+    if (index + 2 < photos.length) preload(photos[index + 2].src);
+  }, [index, photos]);
+
   // Keyboard nav
   useEffect(() => {
     const fn = (e) => {
@@ -230,18 +237,11 @@ export default function StoryMode({ photos, startIndex = 0, onClose }) {
         </div>
       </div>
 
-      {/* Preload next image so transition never waits on network */}
-      {index < photos.length - 1 && (
-        <link
-          rel="preload"
-          as="image"
-          href={photos[index + 1].src}
-        />
-      )}
+      {/* Preload handled via JS useEffect below */}
 
       {/* ── Ken Burns photo ── */}
       <div className="absolute inset-0 overflow-hidden">
-        <AnimatePresence mode="sync">
+        <AnimatePresence mode="sync" initial={false}>
           <motion.div
             key={index}
             className="absolute inset-0"
@@ -249,6 +249,7 @@ export default function StoryMode({ photos, startIndex = 0, onClose }) {
             animate={variant.animate}
             exit={variant.exit}
             transition={variant.transition}
+            style={{ willChange: "transform, clip-path, opacity" }}
           >
             {/* Blurred background — fills letterbox gaps */}
             <div className="absolute inset-0 scale-110 overflow-hidden">
@@ -260,6 +261,7 @@ export default function StoryMode({ photos, startIndex = 0, onClose }) {
                 style={{ filter: "blur(24px)", opacity: 0.65 }}
                 draggable={false}
                 loading="eager"
+                decoding="sync"
               />
             </div>
 
@@ -276,7 +278,8 @@ export default function StoryMode({ photos, startIndex = 0, onClose }) {
                 className="w-full h-full object-contain"
                 draggable={false}
                 loading="eager"
-                decoding="async"
+                decoding="sync"
+                fetchpriority="high"
               />
             </motion.div>
 
