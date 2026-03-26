@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import BowArrow from "./BowArrow";
+
 
 const LETTER_LINES = [
   "For Sneha, Turning Twenty-Three 🎂",
@@ -85,7 +85,7 @@ function useTypewriterLines(lines, active) {
 
 
 
-export default function LetterModal({ showPlane = false, autoOpen = false }) {
+export default function LetterModal({ autoOpen = false }) {
   const [open,        setOpen]        = useState(false);
   const [envelopeOut, setEnvelopeOut] = useState(false);
   const [showLetter,  setShowLetter]  = useState(false);
@@ -126,8 +126,6 @@ export default function LetterModal({ showPlane = false, autoOpen = false }) {
 
   return (
     <>
-      {showPlane && !open && <BowArrow onLaunch={openModal} />}
-
       <AnimatePresence>
         {open && (
           <motion.div

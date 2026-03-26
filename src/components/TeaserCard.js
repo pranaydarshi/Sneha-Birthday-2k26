@@ -61,23 +61,29 @@ export default function TeaserCard({ active, onDone }) {
             </motion.p>
           </div>
 
-          {/* CTA button */}
-          <motion.button
-            initial={{ opacity: 0, scale: 0.85 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 1.4, type: "spring", stiffness: 220 }}
-            whileHover={{ scale: 1.06, y: -2 }}
-            whileTap={{ scale: 0.96 }}
-            onClick={onDone}
-            className="mt-2 px-8 py-3.5 rounded-full font-body font-semibold text-sm tracking-wide
-                       text-[#4A2A2A] shadow-lg transition-all"
-            style={{
-              background: "linear-gradient(135deg, #FFD6E0, #FFAEC9)",
-              boxShadow: "0 4px 20px rgba(244,114,182,0.35)",
-            }}
+          {/* Bow hint — points to the bow that appears at bottom */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.4 }}
+            className="flex flex-col items-center gap-1 mt-2"
           >
-            Okay fine, show me 👀
-          </motion.button>
+            <motion.span
+              animate={{ y: [0, 6, 0] }}
+              transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+              style={{ fontSize: "1.4rem", lineHeight: 1 }}
+            >
+              🏹
+            </motion.span>
+            <span style={{
+              fontSize: "0.6rem",
+              color: "rgba(249,168,212,0.7)",
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+            }}>
+              draw the bow below
+            </span>
+          </motion.div>
 
           {/* Decorative sparkles */}
           {["✨","💫","⭐"].map((s, i) => (

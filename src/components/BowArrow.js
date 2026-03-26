@@ -11,7 +11,6 @@ const CRACKS = [
   { d: "M200 52 L214 290 L244 520 L274 755",  w: 1.9, o: 0.75, delay: 0.06 },
   { d: "M200 52 L128 145 L55 188 L2 222",     w: 1.7, o: 0.65, delay: 0.08 },
   { d: "M200 52 L272 140 L348 182 L400 215",  w: 1.7, o: 0.65, delay: 0.08 },
-  // Spider-web connectors
   { d: "M155 172 L245 168",                   w: 1.0, o: 0.42, delay: 0.10 },
   { d: "M142 400 L262 408",                   w: 1.0, o: 0.38, delay: 0.12 },
   { d: "M88  268 L318 252",                   w: 0.8, o: 0.32, delay: 0.14 },
@@ -30,28 +29,24 @@ function ScreenCrack({ show }) {
           transition={{ duration: 0.7, delay: 0.1 }}
           style={{ position: "fixed", inset: 0, zIndex: 9990, pointerEvents: "none" }}
         >
-          {/* White flash — fades quickly */}
+          {/* White flash */}
           <motion.div
             initial={{ opacity: 1 }}
             animate={{ opacity: 0 }}
             transition={{ duration: 0.28, ease: "easeOut" }}
             style={{ position: "absolute", inset: 0, background: "white" }}
           />
-
-          {/* Dark tint so cracks are visible */}
+          {/* Dark tint */}
           <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.38)" }} />
-
-          {/* Crack SVG */}
+          {/* Cracks */}
           <svg
             style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
             viewBox="0 0 400 800"
             preserveAspectRatio="xMidYMid slice"
           >
-            {/* Impact glow */}
             <circle cx="200" cy="52" r="32" fill="white" opacity="0.15" />
             <circle cx="200" cy="52" r="16" fill="white" opacity="0.45" />
             <circle cx="200" cy="52" r="7"  fill="white" opacity="0.95" />
-
             {CRACKS.map(({ d, w, o, delay }, i) => (
               <motion.path
                 key={i}
@@ -67,12 +62,11 @@ function ScreenCrack({ show }) {
               />
             ))}
           </svg>
-
-          {/* Screen shake — applied to the whole overlay */}
+          {/* Screen shake */}
           <motion.div
             animate={{
-              x: [0, -11, 11, -8,  8, -5, 5, -2, 2, 0],
-              y: [0,  -6,  6, -4,  4, -2, 2,  0, 0, 0],
+              x: [0, -11, 11, -8, 8, -5, 5, -2, 2, 0],
+              y: [0,  -6,  6, -4, 4, -2, 2,  0, 0, 0],
             }}
             transition={{ duration: 0.52, ease: "easeOut" }}
             style={{ position: "absolute", inset: 0 }}
@@ -83,33 +77,30 @@ function ScreenCrack({ show }) {
   );
 }
 
-// ── Constants ────────────────────────────────────────────────────────
-const MAX_PULL       = 68;   // px — max bow draw distance
-const FIRE_THRESHOLD = 30;   // px — minimum pull to actually fire
+const MAX_PULL       = 52;
+const FIRE_THRESHOLD = 24;
 
 export default function BowArrow({ onLaunch }) {
-  const [phase,  setPhase]  = useState("ready"); // ready | pulling | launched | cracked | done
+  const [phase,  setPhase]  = useState("ready");
   const [pullY,  setPullY]  = useState(0);
 
-  // Derived: string bends horizontally as arrow is pulled down
-  const tension  = Math.min(pullY / MAX_PULL, 1);
-  const strBendX = 40 + tension * 24; // string midpoint X moves right
+  // Arrow position in SVG — nock sits at string centre (y=72), tip above it
+  const nockY = 72 + pullY;
+  const tipY  = 6  + pullY;
+
+  const handleDragStart = () => setPhase("pulling");
 
   const handleDrag = (_, info) => {
     setPullY(Math.max(0, Math.min(MAX_PULL, info.offset.y)));
   };
 
-  const handleDragStart = () => setPhase("pulling");
-
   const handleDragEnd = (_, info) => {
-    const pulled = info.offset.y;
-    if (pulled >= FIRE_THRESHOLD) {
+    if (info.offset.y >= FIRE_THRESHOLD) {
       setPullY(0);
       setPhase("launched");
-      setTimeout(() => setPhase("cracked"), 660);
-      setTimeout(() => { setPhase("done"); onLaunch(); }, 2750);
+      setTimeout(() => setPhase("cracked"), 620);
+      setTimeout(() => { setPhase("done"); onLaunch(); }, 2700);
     } else {
-      // Snap back — not enough pull
       setPullY(0);
       setPhase("ready");
     }
@@ -119,30 +110,29 @@ export default function BowArrow({ onLaunch }) {
 
   return (
     <>
-      {/* ── Screen crack ── */}
       <ScreenCrack show={phase === "cracked"} />
 
-      {/* ── Arrow flying up (after launch, before crack) ── */}
+      {/* ── Arrow flying up after launch ── */}
       <AnimatePresence>
         {phase === "launched" && (
           <motion.div
             key="flying-arrow"
-            initial={{ opacity: 1, y: 0 }}
-            animate={{ opacity: 1, y: -(window.innerHeight + 120) }}
-            transition={{ duration: 0.62, ease: [0.18, 0.04, 0.38, 1] }}
+            initial={{ y: 0, opacity: 1 }}
+            animate={{ y: -(window.innerHeight + 200), opacity: 1 }}
+            transition={{ duration: 0.58, ease: [0.15, 0.05, 0.35, 1] }}
             style={{
               position: "fixed",
-              bottom: 148,
+              bottom: 160,
               left: "50%",
               transform: "translateX(-50%)",
               zIndex: 9989,
               pointerEvents: "none",
             }}
           >
-            <svg width="20" height="68" viewBox="0 0 20 68">
+            <svg width="20" height="70" viewBox="0 0 20 70">
               <polygon points="10,0 2,18 18,18" fill="#EC4899" />
-              <rect x="8" y="18" width="4" height="34" fill="#8B5E5E" rx="1" />
-              <path d="M6 50 L-2 64 M14 50 L22 64" stroke="#F472B6" strokeWidth="2.5" strokeLinecap="round" />
+              <rect x="8" y="18" width="4" height="36" fill="#8B5E5E" rx="1" />
+              <path d="M6 52 L-2 66 M14 52 L22 66" stroke="#F472B6" strokeWidth="2.5" strokeLinecap="round" />
             </svg>
           </motion.div>
         )}
@@ -153,99 +143,120 @@ export default function BowArrow({ onLaunch }) {
         {(phase === "ready" || phase === "pulling") && (
           <motion.div
             key="bow-ui"
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.7, y: 10 }}
-            transition={{ type: "spring", stiffness: 230, damping: 20 }}
+            exit={{ opacity: 0, scale: 0.8, y: 10 }}
+            transition={{ type: "spring", stiffness: 220, damping: 22, delay: 0.6 }}
             style={{
               position: "fixed",
-              bottom: 48,
+              bottom: 44,
               left: "50%",
               transform: "translateX(-50%)",
-              zIndex: 150,
+              zIndex: 9985,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               userSelect: "none",
             }}
           >
-            {/* Hint label — fades when pulling */}
+            {/* Hint */}
             <motion.div
-              animate={phase === "pulling" ? { opacity: 0 } : { opacity: [0.55, 1, 0.55] }}
-              transition={phase === "pulling" ? { duration: 0.15 } : { duration: 2.2, repeat: Infinity }}
+              animate={phase === "pulling"
+                ? { opacity: 0 }
+                : { opacity: [0.5, 1, 0.5] }
+              }
+              transition={phase === "pulling"
+                ? { duration: 0.15 }
+                : { duration: 2.2, repeat: Infinity }
+              }
               style={{
                 fontSize: "0.58rem",
-                color: "#C8848C",
+                color: "#F9A8D4",
                 letterSpacing: "0.2em",
                 textTransform: "uppercase",
-                background: "rgba(255,240,245,0.92)",
-                padding: "3px 11px",
+                background: "rgba(20,8,8,0.85)",
+                border: "1px solid rgba(249,168,212,0.3)",
+                padding: "3px 12px",
                 borderRadius: 99,
-                marginBottom: 14,
+                marginBottom: 12,
                 whiteSpace: "nowrap",
-                boxShadow: "0 2px 8px rgba(200,130,140,0.22)",
-                backdropFilter: "blur(4px)",
+                backdropFilter: "blur(6px)",
               }}
             >
               pull &amp; release ↑
             </motion.div>
 
-            {/* Bow + Arrow SVG */}
-            <div style={{ position: "relative", width: 80, height: 178 }}>
+            {/* ── Bow SVG (horizontal ∩, arrow vertical ↑) ── */}
+            <div style={{ position: "relative", width: 200, height: 120 }}>
               <svg
-                width="80"
-                height="178"
-                viewBox="0 0 80 178"
+                width="200"
+                height="120"
+                viewBox="0 0 200 120"
                 style={{ position: "absolute", inset: 0, overflow: "visible" }}
               >
-                {/* Bow arc */}
+                {/* Bow arc — horizontal ∩ shape */}
                 <path
-                  d="M40 8 Q76 89 40 170"
+                  d="M 18 72 Q 100 8 182 72"
                   fill="none"
                   stroke="#8B5E5E"
-                  strokeWidth="5"
+                  strokeWidth="5.5"
                   strokeLinecap="round"
                 />
                 {/* Bow grain highlight */}
                 <path
-                  d="M40 8 Q76 89 40 170"
+                  d="M 18 72 Q 100 8 182 72"
                   fill="none"
                   stroke="#C8A4A4"
-                  strokeWidth="1.6"
+                  strokeWidth="1.8"
+                  strokeDasharray="6 9"
                   strokeLinecap="round"
-                  opacity="0.45"
-                  strokeDasharray="5 7"
+                  opacity="0.5"
                 />
+                {/* Bow tip caps */}
+                <circle cx="18"  cy="72" r="5" fill="#8B5E5E" />
+                <circle cx="182" cy="72" r="5" fill="#8B5E5E" />
 
-                {/* Bowstring — bends as arrow is pulled */}
+                {/* Bowstring — straight when at rest, V-down when pulled */}
                 <path
-                  d={`M40 8 Q${strBendX} 89 40 170`}
+                  d={`M 18 72 L 100 ${nockY} L 182 72`}
                   fill="none"
                   stroke="#F9A8D4"
-                  strokeWidth="2"
+                  strokeWidth="2.2"
                   strokeLinecap="round"
                 />
 
-                {/* Arrow group — slides down with pull */}
-                <g transform={`translate(0, ${pullY})`}>
-                  {/* Arrowhead */}
-                  <polygon points="40,6 33,22 47,22" fill="#EC4899" />
-                  {/* Shaft */}
-                  <line
-                    x1="40" y1="22" x2="40" y2="96"
-                    stroke="#8B5E5E" strokeWidth="2.8" strokeLinecap="round"
-                  />
-                  {/* Fletching */}
-                  <path
-                    d="M36 88 L27 101 M44 88 L53 101"
-                    stroke="#F472B6" strokeWidth="2.2" strokeLinecap="round"
-                  />
-                  {/* Nock indicator */}
-                  <circle cx="40" cy="99" r="6" fill="#FDE8F0" stroke="#F472B6" strokeWidth="2" />
-                </g>
+                {/* ── Arrow (vertical ↑, perpendicular to bow) ── */}
+                {/* Arrowhead — pink triangle */}
+                <polygon
+                  points={`100,${tipY} 92,${tipY + 17} 108,${tipY + 17}`}
+                  fill="#EC4899"
+                />
+                {/* Shaft */}
+                <line
+                  x1="100" y1={tipY + 17}
+                  x2="100" y2={nockY - 7}
+                  stroke="#8B5E5E"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                />
+                {/* Fletching — two wings angled out from nock */}
+                <path
+                  d={`M 95 ${nockY - 9} L 82 ${nockY + 6} M 105 ${nockY - 9} L 118 ${nockY + 6}`}
+                  stroke="#F472B6"
+                  strokeWidth="2.4"
+                  strokeLinecap="round"
+                />
+                {/* Nock indicator */}
+                <circle
+                  cx="100" cy={nockY}
+                  r="6"
+                  fill="#FDE8F0"
+                  stroke="#F472B6"
+                  strokeWidth="2"
+                />
               </svg>
 
-              {/* Invisible drag handle — sits at the nock */}
+              {/* Invisible drag handle — sits over the nock */}
               <motion.div
                 drag="y"
                 dragConstraints={{ top: 0, bottom: MAX_PULL }}
@@ -257,14 +268,13 @@ export default function BowArrow({ onLaunch }) {
                 style={{
                   position: "absolute",
                   left: "50%",
-                  top: 99,
+                  top: 72,
                   transform: "translate(-50%, -50%)",
-                  width: 44,
-                  height: 44,
+                  width: 48,
+                  height: 48,
                   cursor: phase === "pulling" ? "grabbing" : "grab",
                   touchAction: "none",
                   borderRadius: "50%",
-                  // Uncomment to debug: background: "rgba(255,0,0,0.2)",
                 }}
               />
             </div>

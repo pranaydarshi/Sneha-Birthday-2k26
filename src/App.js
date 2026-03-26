@@ -8,6 +8,7 @@ import FallingCelebration  from "./components/FallingCelebration";
 import LetterModal         from "./components/LetterModal";
 import SurpriseCard        from "./components/SurpriseCard";
 import TeaserCard          from "./components/TeaserCard";
+import BowArrow            from "./components/BowArrow";
 
 const UNLOCK_TIME = Date.now() + 10 * 1000; // TEST MODE — change back to April 4 before sharing
 
@@ -17,7 +18,7 @@ export default function App() {
   const [autoPlayStory,  setAutoPlayStory]  = useState(false);
   const [celebrating,    setCelebrating]    = useState(false);
   const [showSurprise,   setShowSurprise]   = useState(false);
-  const [showPlane,   setShowPlane]   = useState(false);
+  const [showBow,     setShowBow]     = useState(false);
   const [showTeaser,  setShowTeaser]  = useState(false);
   const [openLetter,  setOpenLetter]  = useState(false);
   const [cakeDone,    setCakeDone]    = useState(false);
@@ -50,7 +51,8 @@ export default function App() {
 
   const handleAutoPlayDone = () => {
     setAutoPlayStory(false);
-    setShowTeaser(true); // teaser card first, then letter
+    setShowTeaser(true);
+    setShowBow(true); // bow appears over teaser card
   };
 
   return (
@@ -62,15 +64,17 @@ export default function App() {
         active={showSurprise}
         onDone={() => { setShowSurprise(false); setAutoPlayStory(true); }}
       />
-      <TeaserCard
-        active={showTeaser}
-        onDone={() => {
-          setShowTeaser(false);
-          setOpenLetter(true);
-          setTimeout(() => setShowPlane(true), 2000);
-        }}
-      />
-      <LetterModal showPlane={showPlane} autoOpen={openLetter} />
+      <TeaserCard active={showTeaser} onDone={() => {}} />
+      {showBow && (
+        <BowArrow
+          onLaunch={() => {
+            setOpenLetter(true);
+            // Keep teaser + bow visible while crack fades, then clean up
+            setTimeout(() => setShowTeaser(false), 1200);
+          }}
+        />
+      )}
+      <LetterModal autoOpen={openLetter} />
       <Navbar />
 
       <main>
