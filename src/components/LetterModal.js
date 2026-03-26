@@ -306,7 +306,7 @@ function FlyingPlane({ onClick }) {
   );
 }
 
-export default function LetterModal({ showPlane = false }) {
+export default function LetterModal({ showPlane = false, autoOpen = false }) {
   const [open,        setOpen]        = useState(false);
   const [envelopeOut, setEnvelopeOut] = useState(false);
   const [showLetter,  setShowLetter]  = useState(false);
@@ -318,6 +318,14 @@ export default function LetterModal({ showPlane = false }) {
     setTimeout(() => setEnvelopeOut(true), 500);
     setTimeout(() => setShowLetter(true), 1200);
   };
+
+  // Auto-open when story ends
+  useEffect(() => {
+    if (autoOpen) {
+      const t = setTimeout(openModal, 600); // small delay so story exit animates first
+      return () => clearTimeout(t);
+    }
+  }, [autoOpen]); // eslint-disable-line
 
   const closeModal = () => {
     setOpen(false);

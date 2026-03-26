@@ -112,9 +112,15 @@ export default function StoryMode({ photos, startIndex = 0, onClose }) {
       const pct = Math.min((el / STORY_DURATION) * 100, 100);
       setProgress(pct);
       if (pct >= 100) {
+        clearInterval(intervalRef.current);
         elapsed.current = 0;
         setProgress(0);
-        setIndex(i => (i + 1) % photos.length);
+        // Last photo — close story instead of looping
+        if (index === photos.length - 1) {
+          onClose();
+        } else {
+          setIndex(i => i + 1);
+        }
       }
     }, 30);
     return () => clearInterval(intervalRef.current);

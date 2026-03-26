@@ -16,7 +16,8 @@ export default function App() {
   const [autoPlayStory,  setAutoPlayStory]  = useState(false);
   const [celebrating,    setCelebrating]    = useState(false);
   const [showSurprise,   setShowSurprise]   = useState(false);
-  const [showPlane, setShowPlane] = useState(false); // appears only after story is closed
+  const [showPlane,  setShowPlane]  = useState(false);
+  const [openLetter, setOpenLetter] = useState(false);
 
   const handleUnlocked = () => {
     setLocked(false);
@@ -45,7 +46,8 @@ export default function App() {
 
   const handleAutoPlayDone = () => {
     setAutoPlayStory(false);
-    setTimeout(() => setShowPlane(true), 800); // plane appears after story is closed
+    setOpenLetter(true);                    // letter opens as the final surprise
+    setTimeout(() => setShowPlane(true), 800); // plane appears after, for re-reading
   };
 
   return (
@@ -57,7 +59,7 @@ export default function App() {
         active={showSurprise}
         onDone={() => { setShowSurprise(false); setAutoPlayStory(true); }}
       />
-      <LetterModal showPlane={showPlane} />
+      <LetterModal showPlane={showPlane} autoOpen={openLetter} />
       <Navbar />
 
       <main>
