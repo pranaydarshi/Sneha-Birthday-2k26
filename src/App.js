@@ -20,6 +20,7 @@ export default function App() {
   const [showPlane,   setShowPlane]   = useState(false);
   const [showTeaser,  setShowTeaser]  = useState(false);
   const [openLetter,  setOpenLetter]  = useState(false);
+  const [cakeDone,    setCakeDone]    = useState(false);
 
   const handleUnlocked = () => {
     setLocked(false);
@@ -39,6 +40,7 @@ export default function App() {
 
   // Cake blown → celebration for 2s → stop canvas → show surprise card
   const handleCakeCelebrate = () => {
+    setCakeDone(true);
     setCelebrating(true);
     // Last particle wave spawns at 1600ms; max fall duration ~4.8s from that point.
     // Wait ~5800ms so all flowers land off-screen before the card pops up.
@@ -77,10 +79,12 @@ export default function App() {
           <BirthdayCake onCelebrate={handleCakeCelebrate} />
         </div>
 
-        <Gallery
-          autoPlay={autoPlayStory}
-          onAutoPlayDone={handleAutoPlayDone}
-        />
+        {cakeDone && (
+          <Gallery
+            autoPlay={autoPlayStory}
+            onAutoPlayDone={handleAutoPlayDone}
+          />
+        )}
       </main>
 
       <Footer />

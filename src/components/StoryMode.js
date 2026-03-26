@@ -90,8 +90,12 @@ export default function StoryMode({ photos, startIndex = 0, onClose }) {
   const goNext = useCallback(() => {
     elapsed.current = 0;
     setProgress(0);
-    setIndex(i => (i + 1) % photos.length);
-  }, [photos.length]);
+    if (index === photos.length - 1) {
+      onClose();
+    } else {
+      setIndex(i => i + 1);
+    }
+  }, [index, photos.length, onClose]);
 
   const goPrev = useCallback(() => {
     elapsed.current = 0;
