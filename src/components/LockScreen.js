@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Confetti from "./Confetti";
 
 // TEST: unlocks 10 seconds after page load
-const UNLOCK_TIME = new Date("2026-04-04T00:00:00").getTime();
+const UNLOCK_TIME = Date.now() + 10 * 1000; // TEST MODE
 
 function pad(n) {
   return String(n).padStart(2, "0");
