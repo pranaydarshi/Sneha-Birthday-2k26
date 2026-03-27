@@ -21,6 +21,7 @@ export default function App() {
   const [showBow,     setShowBow]     = useState(false);
   const [showTeaser,  setShowTeaser]  = useState(false);
   const [openLetter,  setOpenLetter]  = useState(false);
+  const [showPlane,   setShowPlane]   = useState(false);
   const [cakeDone,    setCakeDone]    = useState(false);
 
   const handleUnlocked = () => {
@@ -69,12 +70,13 @@ export default function App() {
         <BowArrow
           onLaunch={() => {
             setOpenLetter(true);
-            // Keep teaser + bow visible while crack fades, then clean up
             setTimeout(() => setShowTeaser(false), 1200);
+            // Paper plane appears after letter settles
+            setTimeout(() => setShowPlane(true), 4500);
           }}
         />
       )}
-      <LetterModal autoOpen={openLetter} />
+      <LetterModal showPlane={showPlane} autoOpen={openLetter} />
       <Navbar />
 
       <main>
