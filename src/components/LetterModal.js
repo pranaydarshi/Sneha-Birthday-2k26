@@ -107,8 +107,9 @@ function FlyingPlane({ onClick }) {
 
   const x = useMotionValue(typeof window !== "undefined" ? window.innerWidth  * 0.05 : 0);
   const y = useMotionValue(typeof window !== "undefined" ? window.innerHeight * 0.70 : 0);
-  const animRefs = useRef([]);
-  const dockRef  = useRef(null);
+  const animRefs   = useRef([]);
+  const dockRef    = useRef(null);
+  const hasDragged = useRef(false);
 
   const stopAnim = () => animRefs.current.forEach(a => a.stop());
 
@@ -129,7 +130,12 @@ function FlyingPlane({ onClick }) {
     return stopAnim;
   }, [phase]); // eslint-disable-line
 
-  const handleDragStart = () => { stopAnim(); setPhase("dragging"); setOverDock(false); };
+  const handleDragStart = () => {
+    hasDragged.current = true;
+    stopAnim();
+    setPhase("dragging");
+    setOverDock(false);
+  };
 
   const handleDrag = () => {
     if (!dockRef.current) return;
@@ -139,9 +145,16 @@ function FlyingPlane({ onClick }) {
   };
 
   const handleDragEnd = () => {
+    setTimeout(() => { hasDragged.current = false; }, 80);
     if (overDock) { setPhase("docked"); return; }
     setPhase("flying");
     setOverDock(false);
+  };
+
+  // Tap (no drag) → open letter directly
+  const handleClick = () => {
+    if (hasDragged.current) return;
+    onClick();
   };
 
   // ── Docked: show BowArrow game in corner ──────────────────
@@ -177,6 +190,7 @@ function FlyingPlane({ onClick }) {
         onDragStart={handleDragStart}
         onDrag={handleDrag}
         onDragEnd={handleDragEnd}
+        onClick={handleClick}
         whileHover={{ scale: phase === "dragging" ? 1 : 1.25 }}
       >
         {["✨","⭐","💫"].map((s, i) => (
