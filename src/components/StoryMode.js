@@ -215,7 +215,7 @@ export default function StoryMode({ photos, startIndex = 0, onClose }) {
       <div className="absolute top-6 left-0 right-0 z-30 flex items-center justify-between px-5 pt-4">
         <div className="flex items-center gap-2">
           <span className="font-display italic text-white/90 text-sm font-bold">
-            💖 Sneha's Story
+🤝 Sneha's Story
           </span>
           <span className="font-body text-white/50 text-xs">
             {index + 1} / {photos.length}

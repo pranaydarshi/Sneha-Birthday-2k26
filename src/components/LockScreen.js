@@ -52,15 +52,15 @@ export default function LockScreen({ onUnlocked }) {
           className="fixed inset-0 z-[200] flex flex-col items-center justify-center overflow-hidden"
           style={{
             background:
-              "linear-gradient(160deg, #4A2A2A 0%, #6B4040 35%, #3A1A1A 100%)",
+              "linear-gradient(160deg, #0D1F3C 0%, #122847 35%, #081228 100%)",
           }}
         >
           {/* Confetti on unlock */}
           {bursting && <Confetti />}
 
           {/* Decorative blobs */}
-          <div className="absolute top-0 left-0 w-72 h-72 rounded-full bg-[#C8A4A4]/15 blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-          <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-[#E8D5D5]/10 blur-3xl translate-x-1/3 translate-y-1/3 pointer-events-none" />
+          <div className="absolute top-0 left-0 w-72 h-72 rounded-full bg-[#60A5FA]/15 blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+          <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-[#BAD0F0]/10 blur-3xl translate-x-1/3 translate-y-1/3 pointer-events-none" />
 
           <div className="relative z-10 text-center px-6 max-w-lg mx-auto flex flex-col items-center gap-8">
 
@@ -77,7 +77,7 @@ export default function LockScreen({ onUnlocked }) {
               className="text-6xl select-none"
               aria-hidden="true"
             >
-              {bursting ? "💖" : "🔒"}
+              {bursting ? "🫂" : "🔒"}
             </motion.div>
 
             {/* Headline */}
@@ -86,7 +86,7 @@ export default function LockScreen({ onUnlocked }) {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="font-body text-xs uppercase tracking-[0.3em] text-[#E8D5D5]/50 mb-3"
+                className="font-body text-xs uppercase tracking-[0.3em] text-[#BAD0F0]/50 mb-3"
               >
                 A surprise is waiting for
               </motion.p>
@@ -94,16 +94,16 @@ export default function LockScreen({ onUnlocked }) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.45 }}
-                className="font-display italic font-bold text-[#F8F1F1] leading-tight"
+                className="font-display italic font-bold text-[#E8F0FD] leading-tight"
                 style={{ fontSize: "clamp(2.2rem, 7vw, 4rem)" }}
               >
-                Sneha 💕
+                Sneha 🤝
               </motion.h1>
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.6 }}
-                className="mt-3 font-body text-[#E8D5D5]/65 text-sm sm:text-base leading-relaxed"
+                className="mt-3 font-body text-[#BAD0F0]/65 text-sm sm:text-base leading-relaxed"
               >
                 This memory lane unlocks at midnight on her birthday.
                 <br />Come back in…
@@ -126,7 +126,7 @@ export default function LockScreen({ onUnlocked }) {
                 ].map(({ v, l }, i) => (
                   <div key={l} className="flex items-start gap-2 sm:gap-5">
                     {i > 0 && (
-                      <span className="font-display font-bold text-2xl sm:text-4xl text-[#C8A4A4]/60 mt-1 select-none">
+                      <span className="font-display font-bold text-2xl sm:text-4xl text-[#60A5FA]/60 mt-1 select-none">
                         :
                       </span>
                     )}
@@ -135,9 +135,9 @@ export default function LockScreen({ onUnlocked }) {
                         key={v}
                         initial={{ y: -8, opacity: 0 }}
                         animate={{ y: 0,  opacity: 1 }}
-                        className="font-display font-bold text-2xl sm:text-5xl text-[#F8F1F1] leading-none tabular-nums"
+                        className="font-display font-bold text-2xl sm:text-5xl text-[#E8F0FD] leading-none tabular-nums"
                         style={{
-                          background: "linear-gradient(135deg, #fff 0%, #E8D5D5 100%)",
+                          background: "linear-gradient(135deg, #fff 0%, #BAD0F0 100%)",
                           WebkitBackgroundClip: "text",
                           WebkitTextFillColor: "transparent",
                           backgroundClip: "text",
@@ -145,7 +145,7 @@ export default function LockScreen({ onUnlocked }) {
                       >
                         {pad(v)}
                       </motion.span>
-                      <span className="font-body text-[0.6rem] uppercase tracking-widest text-[#E8D5D5]/40 mt-1.5">
+                      <span className="font-body text-[0.6rem] uppercase tracking-widest text-[#BAD0F0]/40 mt-1.5">
                         {l}
                       </span>
                     </div>
@@ -160,7 +160,7 @@ export default function LockScreen({ onUnlocked }) {
                 <motion.p
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="font-display italic text-xl sm:text-2xl text-[#F8F1F1] text-center"
+                  className="font-display italic text-xl sm:text-2xl text-[#E8F0FD] text-center"
                 >
                   It's time! Happy Birthday, Sneha! 🎉
                 </motion.p>
@@ -173,7 +173,7 @@ export default function LockScreen({ onUnlocked }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1 }}
-                className="font-body text-[0.7rem] text-[#E8D5D5]/30 tracking-widest uppercase"
+                className="font-body text-[0.7rem] text-[#BAD0F0]/30 tracking-widest uppercase"
               >
                 Page auto-unlocks at midnight · No refresh needed
               </motion.p>

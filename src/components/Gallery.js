@@ -65,7 +65,7 @@ function PolaroidCard({ photo, index, onOpenLightbox, onOpenStory }) {
         </div>
         {/* Caption strip */}
         <div className="pt-1.5 px-1 text-center">
-          <p className="font-display italic text-[#4A2A2A] leading-tight"
+          <p className="font-display italic text-[#0D1F3C] leading-tight"
              style={{ fontSize: "clamp(0.6rem, 1.8vw, 0.75rem)" }}>
             {photo.caption}
           </p>
@@ -81,8 +81,8 @@ function PolaroidCard({ photo, index, onOpenLightbox, onOpenStory }) {
         _groupHover={{ opacity: 1 }}
         onClick={(e) => { e.stopPropagation(); onOpenStory(index); }}
         className="absolute -top-2.5 -right-2.5 w-8 h-8 rounded-full
-                   bg-[#C8A4A4] text-white text-xs flex items-center justify-center
-                   shadow-lg hover:bg-[#B08080] transition-colors z-10
+                   bg-[#4A7CC9] text-white text-xs flex items-center justify-center
+                   shadow-lg hover:bg-[#2563EB] transition-colors z-10
                    opacity-0 group-hover:opacity-100"
         title="Play story from here"
         aria-label="Play story"
@@ -125,7 +125,7 @@ export default function Gallery({ autoPlay = false, onAutoPlayDone }) {
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={headingInView ? { opacity: 1, y: 0 } : {}}
-          className="font-body text-xs uppercase tracking-[0.3em] text-[#B08080] mb-3"
+          className="font-body text-xs uppercase tracking-[0.3em] text-[#4A7CC9] mb-3"
         >
           Our Story in Pictures
         </motion.p>
@@ -133,7 +133,7 @@ export default function Gallery({ autoPlay = false, onAutoPlayDone }) {
           initial={{ opacity: 0, y: 20 }}
           animate={headingInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.1 }}
-          className="font-display italic font-bold text-[#4A2A2A]"
+          className="font-display italic font-bold text-[#0D1F3C]"
           style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
         >
           A Gallery of Moments
@@ -142,7 +142,7 @@ export default function Gallery({ autoPlay = false, onAutoPlayDone }) {
           initial={{ scaleX: 0 }}
           animate={headingInView ? { scaleX: 1 } : {}}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="mx-auto mt-5 h-[2px] w-24 bg-gradient-to-r from-transparent via-[#C8A4A4] to-transparent"
+          className="mx-auto mt-5 h-[2px] w-24 bg-gradient-to-r from-transparent via-[#60A5FA] to-transparent"
         />
       </div>
 
@@ -158,7 +158,7 @@ export default function Gallery({ autoPlay = false, onAutoPlayDone }) {
           whileTap={{ scale: 0.97 }}
           onClick={() => openStory(0)}
           className="inline-flex items-center gap-3 px-7 py-3.5 rounded-full
-                     bg-gradient-to-r from-[#C8A4A4] to-[#B08080] text-white
+                     bg-gradient-to-r from-[#4A7CC9] to-[#2563EB] text-white
                      font-body font-semibold text-sm tracking-wide shadow-lg hover:shadow-xl transition-all"
         >
           <motion.span animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 1.5, repeat: Infinity }}>▶</motion.span>

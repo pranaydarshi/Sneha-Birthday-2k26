@@ -65,9 +65,9 @@ export default function Navbar() {
             href="#cake"
             onClick={(e) => { e.preventDefault(); handleNavClick("#cake"); }}
             whileHover={{ scale: 1.04 }}
-            className="font-display italic text-[1.25rem] font-bold text-[#8B5E5E] tracking-wide"
+            className="font-display italic text-[1.25rem] font-bold text-[#2563EB] tracking-wide"
           >
-            💖 Sneha
+🤝 Sneha
           </motion.a>
 
           {/* Desktop links */}
@@ -82,14 +82,14 @@ export default function Navbar() {
                     onClick={(e) => { e.preventDefault(); handleNavClick(href); }}
                     whileHover={{ y: -2 }}
                     className={`font-body text-[0.9rem] font-semibold tracking-widest uppercase transition-colors duration-300 relative pb-1 ${
-                      active ? "text-[#8B5E5E]" : "text-[#4A5568] hover:text-[#8B5E5E]"
+                      active ? "text-[#2563EB]" : "text-[#4A5568] hover:text-[#2563EB]"
                     }`}
                   >
                     {label}
                     {active && (
                       <motion.span
                         layoutId="nav-underline"
-                        className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#C8A4A4] rounded-full"
+                        className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#60A5FA] rounded-full"
                       />
                     )}
                   </motion.a>
@@ -135,7 +135,7 @@ export default function Navbar() {
                     <a
                       href={href}
                       onClick={(e) => { e.preventDefault(); handleNavClick(href); }}
-                      className="block py-3 px-2 font-body font-semibold tracking-widest uppercase text-sm text-[#4A5568] hover:text-[#8B5E5E] transition-colors"
+                      className="block py-3 px-2 font-body font-semibold tracking-widest uppercase text-sm text-[#4A5568] hover:text-[#2563EB] transition-colors"
                     >
                       {label}
                     </a>

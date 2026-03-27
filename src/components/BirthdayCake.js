@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const BURST_EMOJIS = ["🎂","💖","✨","🎉","🌸","💜","⭐","🎊","🩷","🎈"];
+const BURST_EMOJIS = ["🎂","🫂","✨","🎉","🌸","🌟","⭐","🎊","🤝","🎈"];
 
 // CSS-based burst — GPU-composited, zero canvas overhead
 function CakeBurst({ active }) {
@@ -123,7 +123,7 @@ export default function BirthdayCake({ onCelebrate }) {
   return (
     <section
       className="relative py-16 flex flex-col items-center overflow-hidden"
-      style={{ background: "linear-gradient(180deg, #FFF0F8 0%, #FDE8F0 50%, #FFF0F8 100%)" }}
+      style={{ background: "linear-gradient(180deg, #EDF4FF 0%, #E8F0FD 50%, #EDF4FF 100%)" }}
     >
       {/* CSS burst — GPU-composited, smooth on all hardware */}
       <CakeBurst active={state === "cut"} />
@@ -145,7 +145,7 @@ export default function BirthdayCake({ onCelebrate }) {
       <motion.div animate={{ y: [0, -9, 0], rotate: [0, -6, 0] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
         className="absolute right-[6%] top-[52%] text-3xl hidden sm:block pointer-events-none select-none">🌟</motion.div>
       <motion.div animate={{ y: [0, -11, 0] }} transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
-        className="absolute right-[2%] top-[70%] text-4xl hidden sm:block pointer-events-none select-none">💖</motion.div>
+        className="absolute right-[2%] top-[70%] text-4xl hidden sm:block pointer-events-none select-none">🫂</motion.div>
       <motion.div animate={{ y: [0, -7, 0] }} transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
         className="absolute right-[11%] top-[36%] text-2xl hidden lg:block pointer-events-none select-none">🎁</motion.div>
 
@@ -156,11 +156,11 @@ export default function BirthdayCake({ onCelebrate }) {
         viewport={{ once: true }}
         className="relative z-10 text-center mb-6"
       >
-        <p className="font-body text-xs uppercase tracking-[0.3em] text-[#C8848C] mb-2">
+        <p className="font-body text-xs uppercase tracking-[0.3em] text-[#3D6EA8] mb-2">
           Make a Wish
         </p>
         <h2
-          className="font-display italic font-bold text-[#4A2A2A] drop-shadow-sm"
+          className="font-display italic font-bold text-[#0D1F3C] drop-shadow-sm"
           style={{ fontSize: "clamp(1.8rem, 5vw, 3rem)" }}
         >
           {state === "cut" ? "Happy Birthday, Sneha! 🎉" : "Blow out the candles 🕯️"}
@@ -183,7 +183,7 @@ export default function BirthdayCake({ onCelebrate }) {
           decoding="async"
           className="w-full rounded-3xl"
           style={{
-            boxShadow: "0 20px 60px rgba(200,100,130,0.25), 0 8px 20px rgba(0,0,0,0.1)",
+            boxShadow: "0 20px 60px rgba(37,99,235,0.25), 0 8px 20px rgba(0,0,0,0.1)",
           }}
           animate={state === "cut" ? { scale: [1, 1.04, 1], filter: ["brightness(1)", "brightness(1.15)", "brightness(1)"] } : {}}
           transition={{ duration: 0.6 }}
@@ -237,7 +237,7 @@ export default function BirthdayCake({ onCelebrate }) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               transition={{ delay: 0.6 }}
-              className="font-body text-sm text-[#B08080] tracking-wide"
+              className="font-body text-sm text-[#4A7CC9] tracking-wide"
             >
               👆 Tap the cake to blow out the candles
             </motion.p>
@@ -248,7 +248,7 @@ export default function BirthdayCake({ onCelebrate }) {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
-              className="font-display italic text-2xl text-[#8B5E5E]"
+              className="font-display italic text-2xl text-[#2563EB]"
             >
               Whoooosh! 💨
             </motion.p>
@@ -261,15 +261,15 @@ export default function BirthdayCake({ onCelebrate }) {
               transition={{ delay: 0.4 }}
               className="text-center"
             >
-              <p className="font-display italic text-xl sm:text-2xl text-[#8B5E5E]">
+              <p className="font-display italic text-xl sm:text-2xl text-[#2563EB]">
                 Wishing you the most beautiful year yet! 🌸
               </p>
               <motion.button
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={(e) => { e.stopPropagation(); setState("idle"); }}
-                className="mt-4 px-5 py-2 rounded-full border border-[#C8A4A4] text-[#8B5E5E]
-                           font-body text-sm hover:bg-[#F9E4E4] transition"
+                className="mt-4 px-5 py-2 rounded-full border border-[#60A5FA] text-[#2563EB]
+                           font-body text-sm hover:bg-[#E8F0FD] transition"
               >
                 🕯️ Relight candles
               </motion.button>

@@ -5,16 +5,16 @@ module.exports = {
     extend: {
       colors: {
         blush: {
-          50:  "#FDF8F8",
-          100: "#F8F1F1",
-          200: "#F0E4E4",
-          300: "#E8D5D5",
-          400: "#D9BEBE",
-          500: "#C8A4A4",
-          600: "#B08080",
-          700: "#8B5E5E",
-          800: "#6B4040",
-          900: "#4A2A2A",
+          50:  "#F0F4FF",
+          100: "#E8F0FD",
+          200: "#D6E4F7",
+          300: "#BAD0F0",
+          400: "#93BAE8",
+          500: "#60A5FA",
+          600: "#4A7CC9",
+          700: "#2563EB",
+          800: "#1E3A8A",
+          900: "#0D1F3C",
         },
         slate: {
           text: "#4A5568",
@@ -26,7 +26,7 @@ module.exports = {
       },
       backgroundImage: {
         "hero-gradient":
-          "linear-gradient(160deg, rgba(232,213,213,0.55) 0%, rgba(248,241,241,0.35) 50%, rgba(74,85,104,0.45) 100%)",
+          "linear-gradient(160deg, rgba(186,208,240,0.55) 0%, rgba(232,240,253,0.35) 50%, rgba(74,85,104,0.45) 100%)",
       },
       keyframes: {
         fadeUp: {

@@ -1,18 +1,18 @@
 import { useEffect, useState, useRef } from "react";
 
-const SYMBOLS = ["💖","🌸","✨","🎉","💜","⭐","🎊","🩷","🌺","💫","🎈","🌷","💝","🎀","🌟"];
+const SYMBOLS = ["🫂", "🌸", "✨", "🎉", "🌟", "⭐", "🎊", "🤝", "🌺", "💫", "🎈", "🌷", "🎊", "🎀", "🌠"];
 
 let uid = 0;
 function makeParticles(count) {
   return Array.from({ length: count }, () => ({
-    id:       ++uid,
-    symbol:   SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)],
-    left:     Math.random() * 100,           // % across screen
-    delay:    Math.random() * 0.6,           // stagger start
+    id: ++uid,
+    symbol: SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)],
+    left: Math.random() * 100,           // % across screen
+    delay: Math.random() * 0.6,           // stagger start
     duration: 2.2 + Math.random() * 2,      // fall speed
-    size:     1.4 + Math.random() * 1,      // rem
-    swing:    (Math.random() - 0.5) * 120,  // px horizontal drift
-    spin:     Math.random() > 0.5 ? 360 : -360,
+    size: 1.4 + Math.random() * 1,      // rem
+    swing: (Math.random() - 0.5) * 120,  // px horizontal drift
+    spin: Math.random() > 0.5 ? 360 : -360,
   }));
 }
 
@@ -21,7 +21,8 @@ export default function FallingCelebration({ active }) {
   const timersRef = useRef([]);
 
   useEffect(() => {
-    // Clear all timers and particles when inactive
+    // Clear al
+    // Zl timers and particles when inactive
     if (!active) {
       timersRef.current.forEach(clearTimeout);
       timersRef.current = [];
@@ -63,15 +64,15 @@ export default function FallingCelebration({ active }) {
           <span
             key={p.id}
             style={{
-              position:   "absolute",
-              left:       `${p.left}%`,
-              top:        0,
-              fontSize:   `${p.size}rem`,
+              position: "absolute",
+              left: `${p.left}%`,
+              top: 0,
+              fontSize: `${p.size}rem`,
               lineHeight: 1,
               willChange: "transform, opacity",
-              "--swing":  `${p.swing}px`,
-              "--spin":   `${p.spin}deg`,
-              animation:  `celebFall ${p.duration}s ease-in ${p.delay}s both`,
+              "--swing": `${p.swing}px`,
+              "--spin": `${p.spin}deg`,
+              animation: `celebFall ${p.duration}s ease-in ${p.delay}s both`,
             }}
           >
             {p.symbol}

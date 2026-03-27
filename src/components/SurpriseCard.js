@@ -122,7 +122,7 @@ export default function SurpriseCard({ active, onDone }) {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4 }}
           className="fixed inset-0 z-[400] flex items-center justify-center px-5"
-          style={{ background: "rgba(20,8,8,0.88)", backdropFilter: "blur(12px)" }}
+          style={{ background: "rgba(8,18,40,0.88)", backdropFilter: "blur(12px)" }}
         >
           <motion.div
             initial={{ scale: 0.8, y: 40, opacity: 0 }}
@@ -138,11 +138,11 @@ export default function SurpriseCard({ active, onDone }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <p className="font-body text-xs uppercase tracking-[0.3em] text-[#E8D5D5]/60 mb-1">
+              <p className="font-body text-xs uppercase tracking-[0.3em] text-[#BAD0F0]/60 mb-1">
                 A surprise for you
               </p>
               <h3
-                className="font-display italic font-bold text-[#F8F1F1]"
+                className="font-display italic font-bold text-[#E8F0FD]"
                 style={{ fontSize: "clamp(1.2rem, 5vw, 1.6rem)" }}
               >
                 {revealed ? "🎬 Enjoy your story!" : "Scratch to reveal 🎁"}
@@ -157,14 +157,14 @@ export default function SurpriseCard({ active, onDone }) {
               className="relative rounded-2xl overflow-hidden"
               style={{
                 width: "100%", height: 180,
-                boxShadow: "0 8px 40px rgba(200,120,140,0.35), 0 2px 8px rgba(0,0,0,0.2)",
+                boxShadow: "0 8px 40px rgba(37,99,235,0.35), 0 2px 8px rgba(0,0,0,0.2)",
               }}
             >
               {/* Reveal layer — shown underneath */}
               <div
                 className="absolute inset-0 flex flex-col items-center justify-center gap-3"
                 style={{
-                  background: "linear-gradient(135deg, #FDE8F0, #F7CAC9)",
+                  background: "linear-gradient(135deg, #D6E4F7, #BAD0F0)",
                 }}
               >
                 <motion.span
@@ -174,10 +174,10 @@ export default function SurpriseCard({ active, onDone }) {
                 >
                   🎬
                 </motion.span>
-                <p className="font-display italic font-bold text-[#4A2A2A] text-lg">
+                <p className="font-display italic font-bold text-[#0D1F3C] text-lg">
                   Your story awaits!
                 </p>
-                <p className="font-body text-xs text-[#8B5E5E]/80 tracking-wide uppercase">
+                <p className="font-body text-xs text-[#2563EB]/80 tracking-wide uppercase">
                   20 photos · just for you
                 </p>
               </div>
@@ -208,7 +208,7 @@ export default function SurpriseCard({ active, onDone }) {
                     animate={{ opacity: 1 }}
                     className="absolute inset-0 pointer-events-none flex items-center justify-center"
                   >
-                    {["✨","🌟","💖","⭐","🎉"].map((s, i) => (
+                    {["✨","🌟","🫂","⭐","🎉"].map((s, i) => (
                       <motion.span
                         key={i}
                         initial={{ scale: 0, opacity: 0 }}
@@ -234,7 +234,7 @@ export default function SurpriseCard({ active, onDone }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.9 }}
-                className="font-body text-[0.7rem] text-[#E8D5D5]/40 tracking-widest uppercase"
+                className="font-body text-[0.7rem] text-[#BAD0F0]/40 tracking-widest uppercase"
               >
                 Use your finger to scratch ✦
               </motion.p>

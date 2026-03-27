@@ -20,7 +20,7 @@ function OutwardArrow({ show }) {
             style={{
               position: "fixed", inset: 0, zIndex: 9991, pointerEvents: "none",
               background:
-                "radial-gradient(ellipse 55% 35% at 50% 8%, transparent 0%, rgba(0,0,0,0.96) 70%)",
+                "radial-gradient(ellipse 55% 35% at 50% 8%, transparent 0%, rgba(0,8,24,0.96) 70%)",
             }}
           />
           {/* Arrow growing toward camera from top-centre */}
@@ -45,11 +45,11 @@ function OutwardArrow({ show }) {
             }}
           >
             <svg width="32" height="90" viewBox="0 0 32 90">
-              <polygon points="16,0 3,24 29,24" fill="#EC4899" />
-              <rect x="12" y="24" width="8" height="46" fill="#8B5E5E" rx="2" />
+              <polygon points="16,0 3,24 29,24" fill="#2563EB" />
+              <rect x="12" y="24" width="8" height="46" fill="#1E3A8A" rx="2" />
               <path
                 d="M9 68 L-2 84 M23 68 L34 84"
-                stroke="#F472B6" strokeWidth="3.5" strokeLinecap="round"
+                stroke="#60A5FA" strokeWidth="3.5" strokeLinecap="round"
               />
             </svg>
           </motion.div>
@@ -131,11 +131,11 @@ export default function BowArrow({ onLaunch, corner = false }) {
 
   const hintStyle = {
     fontSize: corner ? "0.48rem" : "0.58rem",
-    color: "#F9A8D4",
+    color: "#93C5FD",
     letterSpacing: "0.18em",
     textTransform: "uppercase",
-    background: "rgba(20,8,8,0.85)",
-    border: "1px solid rgba(249,168,212,0.28)",
+    background: "rgba(8,18,40,0.85)",
+    border: "1px solid rgba(147,197,253,0.28)",
     padding: corner ? "2px 7px" : "3px 12px",
     borderRadius: 99,
     marginBottom: corner ? 8 : 12,
@@ -169,9 +169,9 @@ export default function BowArrow({ onLaunch, corner = false }) {
             }}
           >
             <svg width="20" height="68" viewBox="0 0 20 68">
-              <polygon points="10,0 2,18 18,18" fill="#EC4899" />
-              <rect x="8" y="18" width="4" height="34" fill="#8B5E5E" rx="1" />
-              <path d="M6 50 L-2 64 M14 50 L22 64" stroke="#F472B6" strokeWidth="2.5" strokeLinecap="round" />
+              <polygon points="10,0 2,18 18,18" fill="#2563EB" />
+              <rect x="8" y="18" width="4" height="34" fill="#1E3A8A" rx="1" />
+              <path d="M6 50 L-2 64 M14 50 L22 64" stroke="#60A5FA" strokeWidth="2.5" strokeLinecap="round" />
             </svg>
           </motion.div>
         )}
@@ -223,39 +223,39 @@ export default function BowArrow({ onLaunch, corner = false }) {
                 {/* Bow arc — horizontal ∩ shape */}
                 <path
                   d={`M ${lTip} ${bowY} Q ${cx} ${peak} ${rTip} ${bowY}`}
-                  fill="none" stroke="#8B5E5E"
+                  fill="none" stroke="#1E3A8A"
                   strokeWidth={corner ? 4 : 5.5} strokeLinecap="round"
                 />
                 {/* Grain */}
                 <path
                   d={`M ${lTip} ${bowY} Q ${cx} ${peak} ${rTip} ${bowY}`}
-                  fill="none" stroke="#C8A4A4"
+                  fill="none" stroke="#60A5FA"
                   strokeWidth={corner ? 1.2 : 1.8}
                   strokeDasharray="6 9" strokeLinecap="round" opacity="0.5"
                 />
                 {/* Tip caps */}
-                <circle cx={lTip} cy={bowY} r={corner ? 3.5 : 5} fill="#8B5E5E" />
-                <circle cx={rTip} cy={bowY} r={corner ? 3.5 : 5} fill="#8B5E5E" />
+                <circle cx={lTip} cy={bowY} r={corner ? 3.5 : 5} fill="#1E3A8A" />
+                <circle cx={rTip} cy={bowY} r={corner ? 3.5 : 5} fill="#1E3A8A" />
 
                 {/* Bowstring — V when pulled */}
                 <path
                   d={`M ${lTip} ${bowY} L ${cx} ${nockY} L ${rTip} ${bowY}`}
-                  fill="none" stroke="#F9A8D4"
+                  fill="none" stroke="#93C5FD"
                   strokeWidth={corner ? 1.6 : 2.2} strokeLinecap="round"
                 />
 
                 {/* Arrow (vertical ↑, perpendicular to bow) */}
-                <polygon points={`${cx},${tipY} ${cx-7},${tipY+15} ${cx+7},${tipY+15}`} fill="#EC4899" />
+                <polygon points={`${cx},${tipY} ${cx-7},${tipY+15} ${cx+7},${tipY+15}`} fill="#2563EB" />
                 <line
                   x1={cx} y1={tipY + 15} x2={cx} y2={nockY - 6}
-                  stroke="#8B5E5E" strokeWidth={corner ? 2.2 : 3} strokeLinecap="round"
+                  stroke="#1E3A8A" strokeWidth={corner ? 2.2 : 3} strokeLinecap="round"
                 />
                 <path
                   d={`M ${cx-5} ${nockY-9} L ${cx-14} ${nockY+4} M ${cx+5} ${nockY-9} L ${cx+14} ${nockY+4}`}
-                  stroke="#F472B6" strokeWidth={corner ? 1.8 : 2.4} strokeLinecap="round"
+                  stroke="#60A5FA" strokeWidth={corner ? 1.8 : 2.4} strokeLinecap="round"
                 />
                 <circle cx={cx} cy={nockY} r={corner ? 4.5 : 6}
-                  fill="#FDE8F0" stroke="#F472B6" strokeWidth={corner ? 1.5 : 2} />
+                  fill="#D6E4F7" stroke="#60A5FA" strokeWidth={corner ? 1.5 : 2} />
               </svg>
 
               {/* Invisible drag handle — only for non-corner mode */}

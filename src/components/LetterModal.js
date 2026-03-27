@@ -34,7 +34,7 @@ const LETTER_LINES = [
   "So here's to you, Sneha — my poti tingari,",
   "Happiest birthday, papa — shine without worry,",
   "Stay strong like you always have, bold and so bright —",
-  "To me, you have always been worth every fight. 💖",
+  "To me, you have always been worth every fight. 🫂",
 ];
 
 // Fixed typewriter — uses useRef for lineIdx/charIdx to avoid stale closure bug
@@ -91,11 +91,11 @@ function PaperPlane({ size = 52 }) {
   return (
     <svg width={size} height={size * 0.65} viewBox="0 0 56 36" fill="none">
       <path d="M1 18 L55 1 L40 18 L55 35 Z"
-        fill="#FDE8F0" stroke="#F472B6" strokeWidth="1.8" strokeLinejoin="round"/>
-      <path d="M40 18 L55 1"  stroke="#EC4899" strokeWidth="1"   opacity="0.55"/>
-      <path d="M40 18 L55 35" stroke="#EC4899" strokeWidth="1"   opacity="0.55"/>
-      <path d="M1 18 L40 18"  stroke="#F9A8D4" strokeWidth="0.9" strokeDasharray="4 3" opacity="0.6"/>
-      <path d="M32 18 L38 26" stroke="#EC4899" strokeWidth="1"   opacity="0.4" strokeLinecap="round"/>
+        fill="#D6E4F7" stroke="#60A5FA" strokeWidth="1.8" strokeLinejoin="round"/>
+      <path d="M40 18 L55 1"  stroke="#2563EB" strokeWidth="1"   opacity="0.55"/>
+      <path d="M40 18 L55 35" stroke="#2563EB" strokeWidth="1"   opacity="0.55"/>
+      <path d="M1 18 L40 18"  stroke="#93C5FD" strokeWidth="0.9" strokeDasharray="4 3" opacity="0.6"/>
+      <path d="M32 18 L38 26" stroke="#2563EB" strokeWidth="1"   opacity="0.4" strokeLinecap="round"/>
     </svg>
   );
 }
@@ -175,8 +175,8 @@ function FlyingPlane({ onClick }) {
           50%     { transform: translateX(-50%) translateY(-4px); }
         }
         @keyframes dockPulse {
-          0%,100% { box-shadow: 0 0 0 0 rgba(244,114,182,0.4); }
-          50%     { box-shadow: 0 0 0 12px rgba(244,114,182,0); }
+          0%,100% { box-shadow: 0 0 0 0 rgba(96,165,250,0.4); }
+          50%     { box-shadow: 0 0 0 12px rgba(96,165,250,0); }
         }
       `}</style>
 
@@ -210,9 +210,9 @@ function FlyingPlane({ onClick }) {
             animation: "labelFloat 2s ease-in-out infinite",
           }}>
             <span style={{
-              fontSize: "0.58rem", color: "#C8848C",
+              fontSize: "0.58rem", color: "#3D6EA8",
               letterSpacing: "0.15em", textTransform: "uppercase",
-              background: "rgba(255,240,245,0.88)",
+              background: "rgba(232,240,253,0.88)",
               padding: "2px 8px", borderRadius: 99, backdropFilter: "blur(4px)",
             }}>dock me 🏹</span>
           </div>
@@ -231,17 +231,17 @@ function FlyingPlane({ onClick }) {
             style={{
               position: "fixed", bottom: 32, right: 28,
               zIndex: 155, width: 72, height: 72, borderRadius: "50%",
-              background: overDock ? "rgba(244,114,182,0.2)" : "rgba(255,240,245,0.95)",
+              background: overDock ? "rgba(96,165,250,0.2)" : "rgba(232,240,253,0.95)",
               display: "flex", flexDirection: "column",
               alignItems: "center", justifyContent: "center", gap: 2,
-              border: `2px dashed ${overDock ? "#F472B6" : "#F9A8D4"}`,
+              border: `2px dashed ${overDock ? "#60A5FA" : "#93C5FD"}`,
               animation: "dockPulse 1.4s ease-in-out infinite",
               transition: "background 0.2s, border-color 0.2s",
               pointerEvents: "none",
             }}
           >
             <span style={{ fontSize: "1.3rem", lineHeight: 1 }}>🏹</span>
-            <span style={{ fontSize: "0.44rem", color: "#C8848C",
+            <span style={{ fontSize: "0.44rem", color: "#3D6EA8",
               letterSpacing: "0.1em", textTransform: "uppercase" }}>
               drop here
             </span>
@@ -304,7 +304,7 @@ export default function LetterModal({ showPlane = false, autoOpen = false }) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35 }}
             className="fixed inset-0 z-[500] flex items-center justify-center p-4"
-            style={{ background: "rgba(30,10,10,0.88)", backdropFilter: "blur(10px)" }}
+            style={{ background: "rgba(10,20,45,0.88)", backdropFilter: "blur(10px)" }}
             onClick={closeModal}
           >
             <motion.div
@@ -319,8 +319,8 @@ export default function LetterModal({ showPlane = false, autoOpen = false }) {
               <div
                 className="relative w-full rounded-2xl shadow-2xl overflow-hidden"
                 style={{
-                  background: "linear-gradient(145deg, #FADADD, #F7CAC9)",
-                  border: "1.5px solid rgba(232,160,160,0.6)",
+                  background: "linear-gradient(145deg, #D6E4F7, #BAD0F0)",
+                  border: "1.5px solid rgba(96,165,250,0.6)",
                   minHeight: 320,
                 }}
               >
@@ -336,7 +336,7 @@ export default function LetterModal({ showPlane = false, autoOpen = false }) {
                     height: 0,
                     borderLeft: "50vw solid transparent",
                     borderRight: "50vw solid transparent",
-                    borderTop: "90px solid #F0AAAA",
+                    borderTop: "90px solid #93BAE8",
                     maxWidth: "100%",
                   }} />
                 </motion.div>
@@ -344,8 +344,8 @@ export default function LetterModal({ showPlane = false, autoOpen = false }) {
                 {/* V-crease */}
                 <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none" style={{ height: 90 }}>
                   <svg width="100%" height="90" viewBox="0 0 460 90" preserveAspectRatio="none">
-                    <line x1="0" y1="0" x2="230" y2="90" stroke="#E8A0A0" strokeWidth="1" opacity="0.5"/>
-                    <line x1="460" y1="0" x2="230" y2="90" stroke="#E8A0A0" strokeWidth="1" opacity="0.5"/>
+                    <line x1="0" y1="0" x2="230" y2="90" stroke="#60A5FA" strokeWidth="1" opacity="0.5"/>
+                    <line x1="460" y1="0" x2="230" y2="90" stroke="#60A5FA" strokeWidth="1" opacity="0.5"/>
                   </svg>
                 </div>
 
@@ -361,8 +361,8 @@ export default function LetterModal({ showPlane = false, autoOpen = false }) {
                       className="relative z-30 m-4 mt-10 rounded-xl p-5 sm:p-7 overflow-y-auto"
                       style={{
                         background: "linear-gradient(160deg, #FFFDF9, #F8F6F2)",
-                        border: "1px solid rgba(200,164,164,0.3)",
-                        boxShadow: "0 4px 24px rgba(180,120,120,0.15)",
+                        border: "1px solid rgba(96,165,250,0.3)",
+                        boxShadow: "0 4px 24px rgba(37,99,235,0.15)",
                         maxHeight: "65vh",
                         scrollbarWidth: "thin",
                       }}
@@ -371,20 +371,20 @@ export default function LetterModal({ showPlane = false, autoOpen = false }) {
                       {[...Array(30)].map((_, i) => (
                         <div key={i}
                           className="absolute left-0 right-0 border-b"
-                          style={{ top: 40 + i * 28, borderColor: "rgba(240,228,228,0.5)" }}
+                          style={{ top: 40 + i * 28, borderColor: "rgba(186,208,240,0.5)" }}
                         />
                       ))}
 
                       <div className="relative z-10">
                         <div className="flex items-center justify-between mb-4">
-                          <span style={{ fontSize: "0.7rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "#C8A4A4" }}>
+                          <span style={{ fontSize: "0.7rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "#60A5FA" }}>
                             A letter from the heart
                           </span>
-                          <span className="text-lg">💌</span>
+                          <span className="text-lg">✉️</span>
                         </div>
 
                         {/* Letter text */}
-                        <div className="font-display text-[#4A2A2A] leading-[1.95]"
+                        <div className="font-display text-[#0D1F3C] leading-[1.95]"
                              style={{ fontSize: "clamp(0.85rem, 2.5vw, 1rem)" }}>
                           {LETTER_LINES.map((line, i) => (
                             <div key={i} className={line === "" ? "h-3" : ""}>
@@ -396,7 +396,7 @@ export default function LetterModal({ showPlane = false, autoOpen = false }) {
                                       animate={{ opacity: [1, 0] }}
                                       transition={{ duration: 0.5, repeat: Infinity }}
                                       className="inline-block w-[2px] h-4 ml-0.5 align-middle"
-                                      style={{ background: "#C8A4A4" }}
+                                      style={{ background: "#60A5FA" }}
                                     />
                                   )}
                                 </span>
@@ -423,9 +423,9 @@ export default function LetterModal({ showPlane = false, autoOpen = false }) {
                         transition={{ duration: 1, repeat: Infinity }}
                         className="text-4xl"
                       >
-                        💌
+                        ✉️
                       </motion.span>
-                      <p className="font-display italic text-[#8B5E5E] text-sm">
+                      <p className="font-display italic text-[#2563EB] text-sm">
                         Opening your letter…
                       </p>
                     </motion.div>
@@ -440,7 +440,7 @@ export default function LetterModal({ showPlane = false, autoOpen = false }) {
                 whileTap={{ scale: 0.9 }}
                 className="absolute -top-4 -right-4 w-9 h-9 rounded-full shadow-lg
                            flex items-center justify-center text-sm font-bold transition z-40"
-                style={{ background: "rgba(255,255,255,0.9)", color: "#8B5E5E", border: "1px solid #F9A8D4" }}
+                style={{ background: "rgba(255,255,255,0.9)", color: "#2563EB", border: "1px solid #93C5FD" }}
               >
                 ✕
               </motion.button>
