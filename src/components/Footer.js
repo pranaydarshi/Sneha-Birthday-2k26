@@ -16,7 +16,7 @@ const SHARE_LINKS = [
   {
     label: "Twitter / X",
     icon:  "𝕏",
-    href:  `https://twitter.com/intent/tweet?text=${encodeURIComponent("Happy Birthday! 🎉💖")}&url=${encodeURIComponent(SHARE_URL)}`,
+    href:  `https://twitter.com/intent/tweet?text=${encodeURIComponent("Happy Birthday! 🎉🤝")}&url=${encodeURIComponent(SHARE_URL)}`,
     color: "bg-[#1DA1F2]/15 hover:bg-[#1DA1F2]/30 border-[#1DA1F2]/30",
   },
   {
