@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect, useLayoutEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const BURST_EMOJIS = ["🎂","🫂","✨","🎉","🌸","🌟","⭐","🎊","🤝","🎈"];
+const BURST_EMOJIS = ["🎂","🫂","✨","🎉","🌟","⭐","🎊","🤝","🎈","🌸"];
 
 // ── Celebration burst ─────────────────────────────────────────
 function CakeBurst({ active }) {
@@ -28,24 +28,18 @@ function CakeBurst({ active }) {
   );
 }
 
-// ── Horizontal knife SVG (blade LEFT, handle RIGHT) ───────────
-function KnifeSvg({ active, w = 105 }) {
-  const bl = active ? "#CBD5E1" : "#D1D5DB";
-  const hd = active ? "#1E3A8A" : "#1F2937";
-  const gd = active ? "#2563EB" : "#374151";
-  const h = w * (34/105);
+// ── Vertical knife SVG (blade DOWN, handle UP) ───────────────
+function VerticalKnifeSvg({ h = 85 }) {
   return (
-    <svg width={w} height={h} viewBox="0 0 210 68" fill="none">
-      <path d="M 2 34 L 105 18 L 105 50 Z" fill={bl}/>
-      <path d="M 2 34 L 105 18 L 55 28 Z" fill="white" opacity={.6}/>
-      <line x1="10" y1="33" x2="100" y2="20" stroke="white" strokeWidth="2" opacity={.75} strokeLinecap="round"/>
-      <rect x={103} y={20} width={16} height={28} fill={bl}/>
-      <rect x={117} y={10} width={10} height={48} rx={3} fill={gd}/>
-      <rect x={125} y={15} width={82} height={38} rx={7} fill={hd}/>
-      <rect x={128} y={18} width={74} height={5} rx={2.5} fill="rgba(255,255,255,.1)"/>
-      {[148,170,195].map(x=><rect key={x} x={x} y={19} width={3} height={30} rx={1.5} fill="rgba(255,255,255,.12)"/>)}
-      {[158,185].map(x=><circle key={x} cx={x} cy={34} r={4} fill="rgba(255,255,255,.18)"/>)}
-      {active && <path d="M 2 34 L 105 18 L 105 50 Z" fill="rgba(147,197,253,.2)"/>}
+    <svg width={h * 0.4} height={h} viewBox="0 0 40 100" fill="none">
+      <rect x={11} y={0} width={18} height={34} rx={4} fill="#1E3A8A"/>
+      <rect x={14} y={4} width={12} height={2.5} rx={1} fill="rgba(255,255,255,.12)"/>
+      <rect x={14} y={9} width={12} height={2.5} rx={1} fill="rgba(255,255,255,.08)"/>
+      <rect x={14} y={14} width={12} height={2.5} rx={1} fill="rgba(255,255,255,.06)"/>
+      <rect x={8} y={32} width={24} height={7} rx={2} fill="#4B5563"/>
+      <path d="M 6 39 L 34 39 L 24 98 L 16 98 Z" fill="#CBD5E1"/>
+      <path d="M 14 39 L 26 39 L 22 90 L 18 90 Z" fill="white" opacity={0.22}/>
+      <line x1="16" y1="98" x2="24" y2="98" stroke="#94A3B8" strokeWidth="1.5" strokeLinecap="round"/>
     </svg>
   );
 }
@@ -117,18 +111,36 @@ function Pearls({ count = 14 }) {
   );
 }
 
-// ── Single candle + flame ─────────────────────────────────────
-function Candle({ color, stripe, idx }) {
+// ── Single candle + flame (with blow-out support) ─────────────
+function Candle({ color, stripe, idx, blown }) {
   return (
     <div style={{ position:"relative", display:"flex", flexDirection:"column", alignItems:"center" }}>
-      <motion.div
-        animate={{ y:[0,-3,0], scaleX:[1,1.2,.85,1] }}
-        transition={{ duration:.55+idx*.08, repeat:Infinity, ease:"easeInOut" }}
-        style={{ position:"relative", marginBottom:1 }}
-      >
-        <div style={{ width:7, height:16, background:"linear-gradient(to top,#EF4444,#F97316 40%,#FCD34D 75%,#FEF9C3)", borderRadius:"50% 50% 40% 40%", filter:"blur(.4px)" }}/>
-        <div style={{ position:"absolute", bottom:3, left:"50%", marginLeft:-1.5, width:3, height:6, background:"rgba(255,255,255,.85)", borderRadius:"50% 50% 40% 40%", filter:"blur(.5px)" }}/>
-      </motion.div>
+      {/* Flame area — fixed height for layout stability */}
+      <div style={{ position:"relative", height:17, width:10, marginBottom:1 }}>
+        {!blown ? (
+          <motion.div
+            animate={{ y:[0,-3,0], scaleX:[1,1.2,.85,1] }}
+            transition={{ duration:.55+idx*.08, repeat:Infinity, ease:"easeInOut" }}
+            style={{ position:"absolute", bottom:0, left:1.5 }}
+          >
+            <div style={{ width:7, height:16, background:"linear-gradient(to top,#EF4444,#F97316 40%,#FCD34D 75%,#FEF9C3)", borderRadius:"50% 50% 40% 40%", filter:"blur(.4px)" }}/>
+            <div style={{ position:"absolute", bottom:3, left:"50%", marginLeft:-1.5, width:3, height:6, background:"rgba(255,255,255,.85)", borderRadius:"50% 50% 40% 40%", filter:"blur(.5px)" }}/>
+          </motion.div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0.7, y: 5, scale: 0.4 }}
+            animate={{ opacity: 0, y: -18, scale: 2.5 }}
+            transition={{ duration: 1.2, delay: idx * 0.12 }}
+            style={{
+              position:"absolute", bottom:4, left:"50%", marginLeft:-3,
+              width:6, height:6, borderRadius:"50%",
+              background:"rgba(180,180,200,0.6)",
+              filter:"blur(3px)", pointerEvents:"none",
+            }}
+          />
+        )}
+      </div>
+      {/* Candle body */}
       <div style={{
         width:10, height:42,
         background:`repeating-linear-gradient(to bottom,${color} 0px,${color} 7px,${stripe} 7px,${stripe} 9px)`,
@@ -139,7 +151,28 @@ function Candle({ color, stripe, idx }) {
   );
 }
 
-// ── MAIN: CSS Chocolate Truffle Cake ──────────────────────────
+// ── Interior face (chocolate cake cross-section with cream) ──
+function InteriorFace({ style }) {
+  return (
+    <div style={{
+      position:"absolute", top:0, bottom:0,
+      background:"linear-gradient(180deg, #3D1A08, #2A0E03 15%, #4A1E0A 50%, #3A1506 85%, #2A0E03)",
+      zIndex:4, pointerEvents:"none",
+      ...style,
+    }}>
+      {[22, 48, 74].map(yp => (
+        <div key={yp} style={{
+          position:"absolute", left:0, right:0,
+          top:`${yp}%`, height:3,
+          background:"rgba(245,235,210,.8)",
+          boxShadow:"0 1px 2px rgba(0,0,0,.12)",
+        }}/>
+      ))}
+    </div>
+  );
+}
+
+// ══════ MAIN: CSS Chocolate Truffle Cake ══════════════════════
 const TOP_W = 168, TOP_H = 72;
 const BOT_W = 252, BOT_H = 86;
 const CHOC = "linear-gradient(to right, #1C0A00 0%, #3D1A08 12%, #5C2A0A 50%, #3D1A08 88%, #1C0A00 100%)";
@@ -153,100 +186,136 @@ const CANDLES = [
   { color:"#86EFAC", stripe:"#22C55E" },
 ];
 
-export default function BirthdayCake({ onCelebrate }) {
-  const [phase, setPhase]       = useState("idle"); // idle|ready|cutting|cut
-  const [knifeX, setKnifeX]     = useState(0);
-  const [cutProg, setCutProg]   = useState(0);  // 0→1 how far left knife has gone
-  const [cutPct, setCutPct]     = useState(68);  // % from left where cut lands
-  const [tierTop, setTierTop]   = useState(0);   // top-tier Y within wrapper (px)
+const topTierBody = {
+  width: TOP_W, height: TOP_H, borderRadius: 6,
+  background: CHOC,
+  overflow: "hidden",
+  boxShadow: "inset 0 2px 10px rgba(255,255,255,.08), inset 0 -4px 12px rgba(0,0,0,.25), 0 4px 12px rgba(0,0,0,.2)",
+  border: "1.5px solid rgba(80,40,10,.5)",
+};
 
-  const wrapRef    = useRef(null);
-  const tierRef    = useRef(null);
-  const startXRef  = useRef(0);
-  const tierRectR  = useRef(null); // cached tier rect
-  const onCelebRef = useRef(onCelebrate);
+export default function BirthdayCake({ onCelebrate }) {
+  // Phases: idle → blowing → celebrated → knife → placed1 → slicing → done
+  const [phase, setPhase]       = useState("idle");
+  const [blown, setBlown]       = useState(false);
+  const [knifeXPct, setKnifeXPct] = useState(50);
+  const [cuts, setCuts]         = useState([]);
+  const [dropping, setDropping] = useState(false);
+
+  const tierRef     = useRef(null);
+  const droppingRef = useRef(false);
+  const onCelebRef  = useRef(onCelebrate);
   onCelebRef.current = onCelebrate;
 
-  // measure where top tier is so knife lines up
-  useLayoutEffect(() => {
-    if (!tierRef.current || !wrapRef.current) return;
-    const wR = wrapRef.current.getBoundingClientRect();
-    const tR = tierRef.current.getBoundingClientRect();
-    setTierTop(tR.top - wR.top);
-  }, []);
-
-  // ── pointer tracking while cutting ─────────────────────────
+  // ── Auto phase transitions ────────────────────────────────
   useEffect(() => {
-    if (phase !== "cutting") return;
-    const wR = wrapRef.current.getBoundingClientRect();
-    const tR = tierRef.current.getBoundingClientRect();
-
-    const onMove = (e) => {
-      e.preventDefault();
-      const src = e.touches ? e.touches[0] : e;
-      const x = src.clientX - tR.left;
-      // progress = how far knife tip has moved from right edge toward left
-      const prog = Math.max(0, Math.min(1, (tR.width - x) / tR.width));
-      setKnifeX(src.clientX - wR.left);
-      setCutProg(prog);
-
-      if (prog > 0.72) {
-        setPhase("cut");
-        setCutPct(Math.max(20, Math.min(80, (x / tR.width) * 100)));
+    let t;
+    if (phase === "blowing") {
+      setBlown(true);
+      t = setTimeout(() => setPhase("celebrated"), 1200);
+    } else if (phase === "celebrated") {
+      t = setTimeout(() => setPhase("knife"), 2500);
+    } else if (phase === "slicing") {
+      t = setTimeout(() => {
+        setPhase("done");
         if (onCelebRef.current) onCelebRef.current();
-      }
-    };
-    const onUp = () => {
-      setPhase(p => p === "cutting" ? "ready" : p);
-      setCutProg(0);
-    };
+      }, 1500);
+    }
+    return () => clearTimeout(t);
+  }, [phase]);
 
-    document.addEventListener("pointermove", onMove, { passive: false });
-    document.addEventListener("pointerup",   onUp);
-    document.addEventListener("touchmove",   onMove, { passive: false });
-    document.addEventListener("touchend",    onUp);
+  // ── Pointer tracking for knife guide ──────────────────────
+  useEffect(() => {
+    if (phase !== "knife" && phase !== "placed1") return;
+    const onMove = (e) => {
+      if (droppingRef.current) return;
+      const tier = tierRef.current;
+      if (!tier) return;
+      const rect = tier.getBoundingClientRect();
+      const src = e.touches ? e.touches[0] : e;
+      const pct = ((src.clientX - rect.left) / rect.width) * 100;
+      setKnifeXPct(Math.max(10, Math.min(90, pct)));
+    };
+    document.addEventListener("pointermove", onMove);
+    document.addEventListener("touchmove", onMove, { passive: true });
     return () => {
       document.removeEventListener("pointermove", onMove);
-      document.removeEventListener("pointerup",   onUp);
-      document.removeEventListener("touchmove",   onMove);
-      document.removeEventListener("touchend",    onUp);
+      document.removeEventListener("touchmove", onMove);
     };
   }, [phase]);
 
-  // ── knife grab handler ─────────────────────────────────────
-  const grabKnife = (e) => {
-    if (phase !== "ready") return;
-    e.preventDefault(); e.stopPropagation();
-    const wR = wrapRef.current.getBoundingClientRect();
-    const src = e.touches ? e.touches[0] : e;
-    startXRef.current = src.clientX;
-    setKnifeX(src.clientX - wR.left);
-    setCutProg(0);
-    setPhase("cutting");
+  // ── Tap handler ───────────────────────────────────────────
+  const handleTap = (e) => {
+    const tier = tierRef.current;
+    let tapPct = knifeXPct;
+    if (tier && (phase === "knife" || phase === "placed1")) {
+      const rect = tier.getBoundingClientRect();
+      const pct = ((e.clientX - rect.left) / rect.width) * 100;
+      tapPct = Math.max(10, Math.min(90, pct));
+      setKnifeXPct(tapPct);
+    }
+
+    if (phase === "idle") {
+      setPhase("blowing");
+    } else if (phase === "knife" && !droppingRef.current) {
+      droppingRef.current = true;
+      setDropping(true);
+      const cutPct = tapPct;
+      setTimeout(() => {
+        setCuts([cutPct]);
+        droppingRef.current = false;
+        setDropping(false);
+        setPhase("placed1");
+      }, 450);
+    } else if (phase === "placed1" && !droppingRef.current) {
+      if (Math.abs(tapPct - cuts[0]) < 12) return;
+      droppingRef.current = true;
+      setDropping(true);
+      const cutPct = tapPct;
+      setTimeout(() => {
+        setCuts(prev => [...prev, cutPct].sort((a, b) => a - b));
+        droppingRef.current = false;
+        setDropping(false);
+        setPhase("slicing");
+      }, 450);
+    }
   };
 
-  const isCut = phase === "cut";
-  const isCutting = phase === "cutting";
+  const reset = (e) => {
+    if (e) e.stopPropagation();
+    setPhase("idle");
+    setBlown(false);
+    setCuts([]);
+    setKnifeXPct(50);
+    setDropping(false);
+    droppingRef.current = false;
+  };
 
-  // knife idle position: to the right of the top tier, vertically centered on it
-  const knifeIdleTop = tierTop + TOP_H / 2 - 16;
+  // ── Computed values ───────────────────────────────────────
+  const isCuttable = phase === "knife" || phase === "placed1";
+  const showSlice  = phase === "slicing" || phase === "done";
+  const leftCut    = cuts.length >= 2 ? cuts[0] : 0;
+  const rightCut   = cuts.length >= 2 ? cuts[1] : 0;
+
+  const toBottomPct = (topPct) =>
+    topPct * (TOP_W / BOT_W) + ((BOT_W - TOP_W) / 2 / BOT_W) * 100;
 
   return (
     <section
       className="relative py-16 flex flex-col items-center overflow-hidden"
       style={{ background:"linear-gradient(180deg, #EDF4FF 0%, #E8F0FD 50%, #EDF4FF 100%)" }}
     >
-      <CakeBurst active={isCut} />
+      <CakeBurst active={phase === "celebrated" || phase === "done"} />
 
       {/* side decorations */}
       {[
         { pos:"left-[3%] top-[22%]", sz:"text-5xl", em:"🎈", dur:3.2, d:0 },
         { pos:"left-[6%] top-[55%]", sz:"text-3xl", em:"🎀", dur:2.8, d:.5 },
-        { pos:"left-[2%] top-[72%]", sz:"text-4xl", em:"🌸", dur:4,   d:1 },
-        { pos:"right-[3%] top-[20%]",sz:"text-5xl", em:"🎊", dur:3.5, d:.3 },
-        { pos:"right-[6%] top-[52%]",sz:"text-3xl", em:"🌟", dur:3,   d:.8 },
-        { pos:"right-[2%] top-[70%]",sz:"text-4xl", em:"🫂", dur:3.8, d:1.2 },
-        { pos:"right-[11%] top-[36%]",sz:"text-2xl hidden lg:block", em:"🎁", dur:2.6, d:.6 },
+        { pos:"left-[2%] top-[72%]", sz:"text-4xl", em:"🌸", dur:4, d:1 },
+        { pos:"right-[3%] top-[20%]", sz:"text-5xl", em:"🎊", dur:3.5, d:.3 },
+        { pos:"right-[6%] top-[52%]", sz:"text-3xl", em:"🌟", dur:3, d:.8 },
+        { pos:"right-[2%] top-[70%]", sz:"text-4xl", em:"🫂", dur:3.8, d:1.2 },
+        { pos:"right-[11%] top-[36%]", sz:"text-2xl hidden lg:block", em:"🎁", dur:2.6, d:.6 },
       ].map((d,i) => (
         <motion.div key={i} animate={{ y:[0,-10,0] }}
           transition={{ duration:d.dur, repeat:Infinity, ease:"easeInOut", delay:d.d }}
@@ -259,115 +328,166 @@ export default function BirthdayCake({ onCelebrate }) {
         <p className="font-body text-xs uppercase tracking-[0.3em] text-[#3D6EA8] mb-2">Make a Wish</p>
         <h2 className="font-display italic font-bold text-[#0D1F3C] drop-shadow-sm"
           style={{ fontSize:"clamp(1.8rem, 5vw, 3rem)" }}>
-          {isCut ? "Happy Birthday, Sneha! 🎉" : "Cut the cake 🎂"}
+          {phase === "done"       ? "Happy Birthday, Sneha! 🎉" :
+           phase === "slicing"    ? "🎂🎉" :
+           isCuttable || dropping ? "Cut the cake! 🔪" :
+           phase === "celebrated" ? "Time to cut! 🎂" :
+           phase === "blowing"    ? "Make a wish… ✨" :
+                                    "Tap the cake 🎂"}
         </h2>
       </motion.div>
 
       {/* ══════ CAKE + KNIFE WRAPPER ══════ */}
-      <div ref={wrapRef} className="relative z-10 select-none"
-        style={{ width:"min(320px, 88vw)", overflow:"visible" }}>
-
+      <div
+        onClick={handleTap}
+        className="relative z-10 select-none"
+        style={{
+          width: "min(320px, 88vw)",
+          overflow: "visible",
+          cursor: phase === "idle" ? "pointer" : isCuttable ? "crosshair" : "default",
+          touchAction: isCuttable ? "none" : undefined,
+        }}
+      >
         {/* ── CSS CAKE ── */}
         <div style={{ display:"flex", flexDirection:"column", alignItems:"center" }}>
 
           {/* candles */}
           <div style={{ display:"flex", gap:14, marginBottom:2, position:"relative", zIndex:10 }}>
-            {CANDLES.map((c,i) => <Candle key={i} idx={i} color={c.color} stripe={c.stripe}/>)}
+            {CANDLES.map((c,i) => (
+              <Candle key={i} idx={i} color={c.color} stripe={c.stripe} blown={blown}/>
+            ))}
           </div>
 
           {/* ─── TOP TIER ─── */}
           <div ref={tierRef} style={{ position:"relative", zIndex:9 }}>
             <GanacheDrips count={8} seed={1}/>
 
-            {/* main body — clipped to left portion when cut */}
-            <div style={{
-              width:TOP_W, height:TOP_H, borderRadius:6,
-              background:CHOC,
-              position:"relative", overflow:"hidden",
-              boxShadow:"inset 0 2px 10px rgba(255,255,255,.08), inset 0 -4px 12px rgba(0,0,0,.25), 0 4px 12px rgba(0,0,0,.2)",
-              border:"1.5px solid rgba(80,40,10,.5)",
-              clipPath: isCut ? `inset(0 ${100-cutPct}% 0 0)` : undefined,
-            }}>
-              <Sprinkles seed={1} n={20}/>
-              <Pearls count={12}/>
-              {/* shine */}
-              <div style={{ position:"absolute", top:0, left:8, width:14, bottom:0, background:"linear-gradient(to bottom,rgba(255,255,255,.08),transparent)", borderRadius:4 }}/>
-            </div>
+            {/* Full cake body (when NOT slicing) */}
+            {!showSlice && (
+              <div style={{ ...topTierBody, position:"relative" }}>
+                <Sprinkles seed={1} n={20}/>
+                <Pearls count={12}/>
+                <div style={{ position:"absolute", top:0, left:8, width:14, bottom:0, background:"linear-gradient(to bottom,rgba(255,255,255,.08),transparent)", borderRadius:4 }}/>
+              </div>
+            )}
 
-            {/* ─── CUT SLICE (right portion — slides out) ─── */}
+            {/* Split cake — left remainder */}
+            {showSlice && (
+              <div style={{ ...topTierBody, position:"relative", clipPath:`inset(0 ${(100-leftCut).toFixed(1)}% 0 0)` }}>
+                <Sprinkles seed={1} n={20}/>
+                <Pearls count={12}/>
+              </div>
+            )}
+
+            {/* Split cake — right remainder */}
+            {showSlice && (
+              <div style={{ ...topTierBody, position:"absolute", top:0, left:0, clipPath:`inset(0 0 0 ${rightCut.toFixed(1)}%)` }}>
+                <Sprinkles seed={1} n={20}/>
+                <Pearls count={12}/>
+              </div>
+            )}
+
+            {/* Interior faces visible in the gap */}
+            {showSlice && (
+              <>
+                <InteriorFace style={{ left:`${leftCut}%`, width:5 }} />
+                <InteriorFace style={{ left:`calc(${rightCut}% - 5px)`, width:5 }} />
+              </>
+            )}
+
+            {/* Animated slice piece */}
             <AnimatePresence>
-              {isCut && (
+              {showSlice && (
                 <motion.div
-                  initial={{ x:0, rotate:0, y:0 }}
-                  animate={{ x:52, rotate:12, y:-14 }}
-                  transition={{ duration:.6, ease:[.22,1,.36,1] }}
+                  initial={{ y: 0, rotate: 0, x: 0 }}
+                  animate={{ y: -55, rotate: -6, x: 10 }}
+                  transition={{ duration: 0.85, ease: [.22,1,.36,1] }}
                   style={{
                     position:"absolute", top:0, left:0,
-                    width:TOP_W, height:TOP_H, borderRadius:6,
-                    clipPath:`inset(0 0 0 ${cutPct}%)`,
-                    transformOrigin:`${cutPct}% 60%`,
+                    width: TOP_W, height: TOP_H, borderRadius:6,
+                    clipPath:`inset(0 ${(100-rightCut).toFixed(1)}% 0 ${leftCut.toFixed(1)}%)`,
+                    transformOrigin:`${((leftCut+rightCut)/2).toFixed(1)}% 100%`,
                     zIndex:15, overflow:"hidden",
-                    boxShadow:"6px 10px 28px rgba(0,0,0,.45)",
+                    boxShadow:"4px 8px 24px rgba(0,0,0,.4)",
                   }}
                 >
-                  {/* exterior */}
                   <div style={{ position:"absolute", inset:0, background:CHOC, borderRadius:6 }}>
                     <Sprinkles seed={1} n={20}/>
                     <Pearls count={12}/>
                   </div>
-                  {/* interior face — chocolate layers with cream */}
-                  <div style={{
-                    position:"absolute", top:0, bottom:0,
-                    left:`${cutPct}%`, width: 30,
-                    background:"linear-gradient(135deg, #2A0E03, #4A1E0A 50%, #3A1506)",
-                    zIndex:4,
-                  }}>
-                    {/* cream filling layers */}
-                    {[.2, .48, .76].map((yp,i)=>(
-                      <div key={i} style={{
-                        position:"absolute", left:0, right:0,
-                        top:`${yp*100}%`, height:4,
-                        background:"rgba(245,235,210,.85)",
-                        boxShadow:"0 1px 2px rgba(0,0,0,.15)",
-                      }}/>
-                    ))}
-                    {/* frosting top */}
-                    <div style={{
-                      position:"absolute", top:0, left:0, right:0, height:8,
-                      background:"linear-gradient(to bottom, #3D1A08, #2A0E03)",
-                    }}/>
-                  </div>
+                  <InteriorFace style={{ left:`${leftCut}%`, width:5 }} />
+                  <InteriorFace style={{ left:`calc(${rightCut}% - 5px)`, width:5 }} />
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* cut line glowing while dragging */}
-            {isCutting && cutProg > 0 && (
-              <div style={{
-                position:"absolute", top:-4, bottom:-4,
-                left: `${(1-cutProg)*100}%`,
-                width:3, borderRadius:2,
-                background:"linear-gradient(to bottom, transparent, rgba(255,255,255,.95), transparent)",
-                boxShadow:"0 0 10px rgba(255,255,255,.9), 0 0 22px rgba(147,197,253,.7)",
-                pointerEvents:"none", zIndex:12,
-              }}/>
-            )}
-
-            {/* cut gap flash after cut */}
-            {isCut && (
-              <motion.div
-                initial={{ opacity:1 }}
-                animate={{ opacity:[1,1,0] }}
-                transition={{ duration:1.2, delay:.2 }}
+            {/* Cut lines (extend through bridge + bottom tier) */}
+            {cuts.map((cut, i) => (
+              <motion.div key={`cut-${i}`}
+                initial={{ scaleY: 0 }}
+                animate={{ scaleY: 1 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
                 style={{
-                  position:"absolute", top:-2, bottom:-2,
-                  left:`${cutPct}%`, width:3, borderRadius:2,
-                  background:"rgba(255,255,255,.9)",
-                  boxShadow:"0 0 14px rgba(255,255,255,.9)",
-                  pointerEvents:"none", zIndex:11,
+                  position:"absolute", top:-2, bottom:-100,
+                  left:`${cut}%`, width:2, borderRadius:1,
+                  background:"linear-gradient(to bottom, rgba(255,255,255,.85), rgba(255,255,255,.5), rgba(255,255,255,.2), transparent)",
+                  boxShadow:"0 0 8px rgba(255,255,255,.6)",
+                  transformOrigin:"top", zIndex:20, pointerEvents:"none",
+                }}
+              />
+            ))}
+
+            {/* Guide line (dashed, follows finger) */}
+            {isCuttable && !dropping && (
+              <motion.div
+                animate={{ left: `${knifeXPct}%` }}
+                transition={{ duration: 0.06 }}
+                style={{
+                  position:"absolute", top:-55, bottom:-100,
+                  width:0, borderLeft:"2px dashed rgba(96,165,250,0.45)",
+                  pointerEvents:"none", zIndex:25,
                 }}
               />
             )}
+
+            {/* Hovering knife (follows finger) */}
+            {isCuttable && !dropping && (
+              <motion.div
+                animate={{ left: `${knifeXPct}%` }}
+                transition={{ duration: 0.08, ease: "linear" }}
+                style={{
+                  position:"absolute", top:-90,
+                  transform:"translateX(-50%)",
+                  zIndex:30, pointerEvents:"none",
+                }}
+              >
+                <VerticalKnifeSvg h={82}/>
+              </motion.div>
+            )}
+
+            {/* Dropping knife animation */}
+            <AnimatePresence>
+              {dropping && (
+                <motion.div
+                  key={`drop-${cuts.length}`}
+                  initial={{ top: -90, opacity: 1 }}
+                  animate={{ top: 200, opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{
+                    top: { duration: 0.4, ease: "easeIn" },
+                    opacity: { delay: 0.35, duration: 0.1 },
+                  }}
+                  style={{
+                    position:"absolute",
+                    left:`${knifeXPct}%`,
+                    transform:"translateX(-50%)",
+                    zIndex:30, pointerEvents:"none",
+                  }}
+                >
+                  <VerticalKnifeSvg h={82}/>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* frosting bridge */}
@@ -391,7 +511,6 @@ export default function BirthdayCake({ onCelebrate }) {
               <Sprinkles seed={3} n={28}/>
               <Pearls count={18}/>
               <div style={{ position:"absolute", top:0, left:10, width:16, bottom:0, background:"linear-gradient(to bottom,rgba(255,255,255,.06),transparent)", borderRadius:4 }}/>
-              {/* chocolate text "23" */}
               <div style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center" }}>
                 <span style={{
                   fontFamily:"Georgia,serif", fontSize:28, fontWeight:"bold",
@@ -400,6 +519,22 @@ export default function BirthdayCake({ onCelebrate }) {
                   letterSpacing:4,
                 }}>23</span>
               </div>
+
+              {/* Cut lines on bottom tier (converted position) */}
+              {cuts.map((cut, i) => (
+                <motion.div key={`bcut-${i}`}
+                  initial={{ scaleY: 0 }}
+                  animate={{ scaleY: 1 }}
+                  transition={{ duration: 0.3, delay: 0.15 }}
+                  style={{
+                    position:"absolute", top:0, bottom:0,
+                    left:`${toBottomPct(cut)}%`, width:2, borderRadius:1,
+                    background:"rgba(255,255,255,.3)",
+                    boxShadow:"0 0 6px rgba(255,255,255,.3)",
+                    transformOrigin:"top", zIndex:5, pointerEvents:"none",
+                  }}
+                />
+              ))}
             </div>
           </div>
 
@@ -411,63 +546,25 @@ export default function BirthdayCake({ onCelebrate }) {
             boxShadow:"0 6px 20px rgba(0,0,0,.1)",
             border:"1px solid rgba(200,220,240,.4)", borderTop:"none",
           }}/>
-        </div>{/* /cake flex column */}
+        </div>
 
-        {/* ══════ KNIFE ══════ */}
-        {!isCut && (
+        {/* Idle tap hint */}
+        {phase === "idle" && (
           <motion.div
+            animate={{ opacity:[.5,1,.5] }}
+            transition={{ duration:1.5, repeat:Infinity }}
             style={{
-              position:"absolute",
-              // When idle/ready: sit to the right of top tier, vertically centered
-              // When cutting: tip follows knifeX
-              ...(isCutting
-                ? { left: knifeX - 4, top: knifeIdleTop }
-                : { right: -8, top: knifeIdleTop }),
-              zIndex: 22,
-              cursor: phase === "idle" ? "pointer" : phase === "ready" ? "grab" : "none",
-              pointerEvents: isCutting ? "none" : "auto",
-              touchAction: "none",
+              position:"absolute", top:8, left:"50%", transform:"translateX(-50%)",
+              whiteSpace:"nowrap", fontSize:".55rem", color:"#fff",
+              background:"rgba(30,58,138,.8)", padding:"3px 10px", borderRadius:99,
+              zIndex:40, pointerEvents:"none",
+              letterSpacing:".08em", textTransform:"uppercase",
             }}
-            animate={phase === "idle" ? { x:[0,8,0] } : {}}
-            transition={phase === "idle" ? { duration:1.3, repeat:Infinity, ease:"easeInOut" } : { duration:.15 }}
-            onClick={() => { if (phase === "idle") setPhase("ready"); }}
-            onPointerDown={grabKnife}
-            onTouchStart={grabKnife}
           >
-            <KnifeSvg active={phase !== "idle"} w={phase === "idle" ? 90 : 105}/>
-
-            {/* idle hint */}
-            {phase === "idle" && (
-              <motion.div animate={{ opacity:[.5,1,.5] }} transition={{ duration:1.4, repeat:Infinity }}
-                style={{ position:"absolute", top:"120%", left:"50%", transform:"translateX(-50%)",
-                  whiteSpace:"nowrap", fontSize:".52rem", color:"#fff", letterSpacing:".1em", textTransform:"uppercase",
-                  background:"rgba(30,58,138,.8)", padding:"2px 8px", borderRadius:99, backdropFilter:"blur(4px)",
-                  pointerEvents:"none" }}>
-                tap me
-              </motion.div>
-            )}
-
-            {/* ready glow + hint */}
-            {phase === "ready" && (
-              <>
-                <motion.div animate={{ scale:[1,1.12,1], opacity:[.4,.85,.4] }}
-                  transition={{ duration:.85, repeat:Infinity }}
-                  style={{ position:"absolute", inset:-7, borderRadius:6,
-                    border:"2px solid #60A5FA", boxShadow:"0 0 16px rgba(96,165,250,.6)",
-                    pointerEvents:"none" }}/>
-                <motion.div animate={{ x:[0,-6,0], opacity:[.5,1,.5] }}
-                  transition={{ duration:.85, repeat:Infinity }}
-                  style={{ position:"absolute", top:"120%", left:"50%", transform:"translateX(-50%)",
-                    whiteSpace:"nowrap", fontSize:".52rem", color:"#fff", letterSpacing:".1em", textTransform:"uppercase",
-                    background:"rgba(37,99,235,.85)", padding:"2px 8px", borderRadius:99, fontWeight:"bold",
-                    pointerEvents:"none" }}>
-                  ← drag to cut
-                </motion.div>
-              </>
-            )}
+            🎂 tap the cake
           </motion.div>
         )}
-      </div>{/* /wrapper */}
+      </div>
 
       {/* ── Status messages ── */}
       <div className="relative z-10 w-full flex flex-col items-center mt-8 min-h-[56px]">
@@ -475,29 +572,47 @@ export default function BirthdayCake({ onCelebrate }) {
           {phase === "idle" && (
             <motion.p key="i" initial={{ opacity:0,y:8 }} animate={{ opacity:1,y:0 }} exit={{ opacity:0 }} transition={{ delay:.5 }}
               className="font-body text-sm text-[#4A7CC9] tracking-wide text-center">
-              🔪 Tap the knife to activate it
+              🎂 Tap the cake to blow out the candles!
             </motion.p>
           )}
-          {phase === "ready" && (
-            <motion.p key="r" initial={{ opacity:0,y:8 }} animate={{ opacity:1,y:0 }} exit={{ opacity:0 }}
-              className="font-body text-sm text-[#2563EB] tracking-wide font-semibold text-center">
-              Grab the knife and slide LEFT to cut!
+          {phase === "blowing" && (
+            <motion.p key="b" initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }}
+              className="font-body text-sm text-[#60A5FA] tracking-wide text-center italic">
+              Make a wish… ✨
             </motion.p>
           )}
-          {isCutting && (
-            <motion.p key="c" initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }}
-              className="font-body text-sm text-[#60A5FA] tracking-wide text-center">
-              Keep slicing… almost there! 🎂
+          {phase === "celebrated" && (
+            <motion.p key="c" initial={{ opacity:0,y:8 }} animate={{ opacity:1,y:0 }} exit={{ opacity:0 }}
+              className="font-body text-sm text-[#2563EB] tracking-wide text-center font-semibold">
+              🔪 Time to cut the cake!
             </motion.p>
           )}
-          {isCut && (
+          {phase === "knife" && (
+            <motion.p key="k" initial={{ opacity:0,y:8 }} animate={{ opacity:1,y:0 }} exit={{ opacity:0 }}
+              className="font-body text-sm text-[#2563EB] tracking-wide text-center">
+              Tap on the cake to make your first cut!
+            </motion.p>
+          )}
+          {phase === "placed1" && (
+            <motion.p key="p1" initial={{ opacity:0,y:8 }} animate={{ opacity:1,y:0 }} exit={{ opacity:0 }}
+              className="font-body text-sm text-[#2563EB] tracking-wide text-center font-semibold">
+              Great! Now tap for the second cut! ✂️
+            </motion.p>
+          )}
+          {phase === "slicing" && (
+            <motion.p key="s" initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }}
+              className="font-display italic text-xl text-[#2563EB] text-center">
+              🎉🎂🎉
+            </motion.p>
+          )}
+          {phase === "done" && (
             <motion.div key="d" initial={{ opacity:0,y:16 }} animate={{ opacity:1,y:0 }} transition={{ delay:.3 }}
               className="text-center">
               <p className="font-display italic text-xl sm:text-2xl text-[#2563EB]">
                 Wishing you the most beautiful year yet! 🌸
               </p>
               <motion.button whileHover={{ scale:1.04 }} whileTap={{ scale:.97 }}
-                onClick={() => { setPhase("idle"); setCutProg(0); }}
+                onClick={reset}
                 className="mt-4 px-5 py-2 rounded-full border border-[#60A5FA] text-[#2563EB] font-body text-sm hover:bg-[#E8F0FD] transition">
                 🎂 Cut again
               </motion.button>
