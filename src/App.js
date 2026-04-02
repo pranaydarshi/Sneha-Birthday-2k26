@@ -10,7 +10,7 @@ import SurpriseCard        from "./components/SurpriseCard";
 import TeaserCard          from "./components/TeaserCard";
 import BowArrow            from "./components/BowArrow";
 
-const UNLOCK_TIME = Date.now() + 10 * 1000; // TEST MODE — change back to April 4 before sharing
+const UNLOCK_TIME = new Date("2026-04-04T00:00:00").getTime();
 
 export default function App() {
   const [locked,         setLocked]         = useState(Date.now() < UNLOCK_TIME);
