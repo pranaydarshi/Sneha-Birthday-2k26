@@ -2,7 +2,6 @@
   "name": "birthday-gallery",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://pranaydarshi.github.io/spring-check-2026",
   "dependencies": {
     "framer-motion": "^10.16.4",
     "nosleep.js": "^0.12.0",
