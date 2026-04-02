@@ -61,6 +61,35 @@ export default function LockScreen({ onUnlocked }) {
           <div className="absolute top-0 left-0 w-72 h-72 rounded-full bg-[#60A5FA]/15 blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
           <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-[#BAD0F0]/10 blur-3xl translate-x-1/3 translate-y-1/3 pointer-events-none" />
 
+          {/* Floating stars */}
+          <style>{`
+            @keyframes twinkle { 0%,100%{opacity:.25;transform:scale(.85)} 50%{opacity:1;transform:scale(1.15)} }
+          `}</style>
+          {[
+            { pos:"top-[7%] left-[11%]",   em:"✨", sz:"1.5rem", dur:"2.8s", d:"0s",    amp:12 },
+            { pos:"top-[18%] right-[9%]",  em:"⭐", sz:"1rem",   dur:"3.5s", d:"0.6s",  amp:9  },
+            { pos:"top-[38%] left-[4%]",   em:"💫", sz:"1.3rem", dur:"4.2s", d:"1s",    amp:14 },
+            { pos:"top-[22%] right-[7%]",  em:"✨", sz:"1.8rem", dur:"3.1s", d:"0.3s",  amp:10 },
+            { pos:"bottom-[28%] left-[7%]",em:"🌟", sz:"1.4rem", dur:"3.8s", d:"0.8s",  amp:12 },
+            { pos:"bottom-[18%] right-[5%]",em:"✨",sz:"1.1rem", dur:"2.5s", d:"1.3s",  amp:9  },
+            { pos:"top-[52%] left-[2%]",   em:"⭐", sz:".85rem", dur:"4.5s", d:"0.5s",  amp:15 },
+            { pos:"top-[58%] right-[3%]",  em:"💫", sz:"1.5rem", dur:"3.2s", d:"1.6s",  amp:11 },
+            { pos:"bottom-[8%] left-[22%]",em:"🌟", sz:"1rem",   dur:"2.9s", d:"0.4s",  amp:8  },
+            { pos:"bottom-[12%] right-[20%]",em:"✨",sz:".9rem",dur:"3.6s", d:"1.1s",  amp:10 },
+            { pos:"top-[45%] right-[12%]", em:"⭐", sz:"1.2rem", dur:"3.3s", d:"0.2s",  amp:13 },
+            { pos:"top-[10%] left-[38%]",  em:"✨", sz:".8rem",  dur:"2.6s", d:"1.4s",  amp:7  },
+          ].map((s, i) => (
+            <motion.div
+              key={i}
+              animate={{ y: [0, -s.amp, 0] }}
+              transition={{ duration: parseFloat(s.dur), repeat: Infinity, ease: "easeInOut", delay: parseFloat(s.d) }}
+              className={`absolute ${s.pos} pointer-events-none select-none`}
+              style={{ fontSize: s.sz, animation: `twinkle ${s.dur} ease-in-out ${s.d} infinite`, willChange:"transform,opacity" }}
+            >
+              {s.em}
+            </motion.div>
+          ))}
+
           <div className="relative z-10 text-center px-6 max-w-lg mx-auto flex flex-col items-center gap-8">
 
             {/* Floating lock / heart icon */}
@@ -76,7 +105,7 @@ export default function LockScreen({ onUnlocked }) {
               className="text-6xl select-none"
               aria-hidden="true"
             >
-              {bursting ? "🫂" : "🔒"}
+              {bursting ? "✨" : "🔒"}
             </motion.div>
 
             {/* Headline */}
@@ -96,7 +125,7 @@ export default function LockScreen({ onUnlocked }) {
                 className="font-display italic font-bold text-[#E8F0FD] leading-tight"
                 style={{ fontSize: "clamp(2.2rem, 7vw, 4rem)" }}
               >
-                Sneha 🤝
+                Sneha ✨
               </motion.h1>
               <motion.p
                 initial={{ opacity: 0 }}
