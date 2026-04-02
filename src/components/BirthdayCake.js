@@ -316,7 +316,7 @@ export default function BirthdayCake({ onCelebrate }) {
 
   // ── Computed values ───────────────────────────────────────
   const isCuttable = phase === "knife" || phase === "placed1";
-  const showSlice  = phase === "slicing" || phase === "done";
+  const showSlice  = phase === "slicing";
   const leftCut    = cuts.length >= 2 ? cuts[0] : 0;
   const rightCut   = cuts.length >= 2 ? cuts[1] : 0;
 
@@ -445,7 +445,7 @@ export default function BirthdayCake({ onCelebrate }) {
             </AnimatePresence>
 
             {/* Cut lines (extend through bridge + bottom tier) */}
-            {cuts.map((cut, i) => (
+            {phase !== "done" && cuts.map((cut, i) => (
               <motion.div key={`cut-${i}`}
                 initial={{ scaleY: 0 }}
                 animate={{ scaleY: 1 }}
@@ -544,7 +544,7 @@ export default function BirthdayCake({ onCelebrate }) {
               </div>
 
               {/* Cut lines on bottom tier (converted position) */}
-              {cuts.map((cut, i) => (
+              {phase !== "done" && cuts.map((cut, i) => (
                 <motion.div key={`bcut-${i}`}
                   initial={{ scaleY: 0 }}
                   animate={{ scaleY: 1 }}
