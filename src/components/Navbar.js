@@ -6,7 +6,7 @@ const NAV_LINKS = [
   { label: "Gallery", href: "#gallery" },
 ];
 
-export default function Navbar() {
+export default function Navbar({ onReset }) {
   const [scrolled,  setScrolled]  = useState(false);
   const [progress,  setProgress]  = useState(0);
   const [menuOpen,  setMenuOpen]  = useState(false);
@@ -130,6 +130,18 @@ export default function Navbar() {
               className="md:hidden overflow-hidden glass border-t border-blush-300/30"
             >
               <ul className="flex flex-col py-4 px-5 gap-1">
+                {/* Reset Experience button — top of menu */}
+                {onReset && (
+                  <li>
+                    <button
+                      onClick={() => { setMenuOpen(false); onReset(); }}
+                      className="w-full flex items-center gap-2 py-3 px-2 font-body font-semibold tracking-widest uppercase text-sm text-[#E57373] hover:text-[#EF5350] transition-colors border-b border-blush-300/20 mb-1 pb-4"
+                    >
+                      <span className="text-base">⏪</span>
+                      Reset Experience
+                    </button>
+                  </li>
+                )}
                 {NAV_LINKS.map(({ label, href }) => (
                   <li key={label}>
                     <a

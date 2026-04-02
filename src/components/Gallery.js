@@ -138,6 +138,14 @@ export default function Gallery({ autoPlay = false, onAutoPlayDone }) {
         >
           A Gallery of Moments
         </motion.h2>
+        <motion.p
+          initial={{ opacity: 0, y: 8 }}
+          animate={headingInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.25 }}
+          className="font-body text-sm text-[#4A7CC9] mt-2 tracking-wide"
+        >
+          23 memories for 23 years 🎂
+        </motion.p>
         <motion.div
           initial={{ scaleX: 0 }}
           animate={headingInView ? { scaleX: 1 } : {}}

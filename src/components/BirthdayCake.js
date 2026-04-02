@@ -194,6 +194,26 @@ const topTierBody = {
   border: "1.5px solid rgba(80,40,10,.5)",
 };
 
+function useCakeAudio() {
+  const audioRef = useRef(null);
+  const play = (src, volume = 0.65) => {
+    try {
+      if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; }
+      const a = new Audio(src);
+      a.volume = volume;
+      a.play().catch(() => {});
+      audioRef.current = a;
+      window._cakeAudio = a; // expose so StoryMode can hand off
+    } catch (_) {}
+  };
+  const stop = () => {
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; }
+    window._cakeAudio = null;
+  };
+  useEffect(() => () => stop(), []);
+  return { play, stop };
+}
+
 export default function BirthdayCake({ onCelebrate }) {
   // Phases: idle → blowing → celebrated → knife → placed1 → slicing → done
   const [phase, setPhase]       = useState("idle");
@@ -206,12 +226,15 @@ export default function BirthdayCake({ onCelebrate }) {
   const droppingRef = useRef(false);
   const onCelebRef  = useRef(onCelebrate);
   onCelebRef.current = onCelebrate;
+  const cakeAudio   = useCakeAudio();
 
   // ── Auto phase transitions ────────────────────────────────
   useEffect(() => {
     let t;
     if (phase === "blowing") {
       setBlown(true);
+      // Play cake-cutting song when candles blow out
+      cakeAudio.play("/audio/cake.mp3", 0.6);
       t = setTimeout(() => setPhase("celebrated"), 1200);
     } else if (phase === "celebrated") {
       t = setTimeout(() => setPhase("knife"), 2500);
@@ -309,17 +332,17 @@ export default function BirthdayCake({ onCelebrate }) {
 
       {/* side decorations */}
       {[
-        { pos:"left-[3%] top-[22%]", sz:"text-5xl", em:"🎈", dur:3.2, d:0 },
-        { pos:"left-[6%] top-[55%]", sz:"text-3xl", em:"🎀", dur:2.8, d:.5 },
-        { pos:"left-[2%] top-[72%]", sz:"text-4xl", em:"🌸", dur:4, d:1 },
-        { pos:"right-[3%] top-[20%]", sz:"text-5xl", em:"🎊", dur:3.5, d:.3 },
-        { pos:"right-[6%] top-[52%]", sz:"text-3xl", em:"🌟", dur:3, d:.8 },
-        { pos:"right-[2%] top-[70%]", sz:"text-4xl", em:"🫂", dur:3.8, d:1.2 },
-        { pos:"right-[11%] top-[36%]", sz:"text-2xl hidden lg:block", em:"🎁", dur:2.6, d:.6 },
+        { pos:"left-[2%] top-[22%]",  sz:"text-2xl sm:text-5xl", em:"🎈", dur:3.2, d:0   },
+        { pos:"left-[4%] top-[55%]",  sz:"text-xl  sm:text-3xl", em:"🎀", dur:2.8, d:.5  },
+        { pos:"left-[1%] top-[72%]",  sz:"text-2xl sm:text-4xl", em:"🌸", dur:4,   d:1   },
+        { pos:"right-[2%] top-[20%]", sz:"text-2xl sm:text-5xl", em:"🎊", dur:3.5, d:.3  },
+        { pos:"right-[4%] top-[52%]", sz:"text-xl  sm:text-3xl", em:"🌟", dur:3,   d:.8  },
+        { pos:"right-[1%] top-[70%]", sz:"text-2xl sm:text-4xl", em:"🫂", dur:3.8, d:1.2 },
+        { pos:"right-[11%] top-[36%]",sz:"hidden lg:block text-2xl", em:"🎁", dur:2.6, d:.6 },
       ].map((d,i) => (
         <motion.div key={i} animate={{ y:[0,-10,0] }}
           transition={{ duration:d.dur, repeat:Infinity, ease:"easeInOut", delay:d.d }}
-          className={`absolute ${d.pos} ${d.sz} hidden sm:block pointer-events-none select-none`}>{d.em}</motion.div>
+          className={`absolute ${d.pos} ${d.sz} pointer-events-none select-none`}>{d.em}</motion.div>
       ))}
 
       {/* heading */}
@@ -513,10 +536,10 @@ export default function BirthdayCake({ onCelebrate }) {
               <div style={{ position:"absolute", top:0, left:10, width:16, bottom:0, background:"linear-gradient(to bottom,rgba(255,255,255,.06),transparent)", borderRadius:4 }}/>
               <div style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center" }}>
                 <span style={{
-                  fontFamily:"Georgia,serif", fontSize:28, fontWeight:"bold",
-                  color:"rgba(255,255,255,.12)",
-                  textShadow:"0 2px 8px rgba(0,0,0,.4)",
-                  letterSpacing:4,
+                  fontFamily:"Georgia,serif", fontSize:32, fontWeight:"bold",
+                  color:"rgba(255,220,180,.55)",
+                  textShadow:"0 0 18px rgba(255,180,80,.45), 0 2px 6px rgba(0,0,0,.5)",
+                  letterSpacing:6,
                 }}>23</span>
               </div>
 

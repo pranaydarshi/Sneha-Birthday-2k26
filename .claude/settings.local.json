@@ -14,7 +14,23 @@
       "Bash(cmd /c dir /o-s \"C:\\\\Users\\\\sai pranay\\\\Desktop\\\\Sai\\\\S_Gift\\\\public\\\\photos\")",
       "Bash(node -e \"require\\(''sharp''\\)\")",
       "Bash(npm install:*)",
-      "Bash(node compress-images.js)"
+      "Bash(node compress-images.js)",
+      "Bash(heroku apps:*)",
+      "Bash(heroku apps:destroy dsp-portfolio-api --confirm dsp-portfolio-api)",
+      "Bash(heroku apps:destroy dsp-portfolio-frontend --confirm dsp-portfolio-frontend)",
+      "Bash(heroku apps:destroy sneha-portfolio-api --confirm sneha-portfolio-api)",
+      "Bash(heroku addons:*)",
+      "Bash(heroku config:*)",
+      "Bash(cp \"/c/Users/sai pranay/Downloads/20250704_181203~2.jpg\" \"/c/Users/sai pranay/Desktop/Sai/S_Gift/public/photos/20250704_181203b.jpg\")",
+      "Bash(cp \"/c/Users/sai pranay/Downloads/IMG-20250323-WA0003~2.jpg\" \"/c/Users/sai pranay/Desktop/Sai/S_Gift/public/photos/IMG-20250323-WA0003.jpg\")",
+      "Bash(cp \"/c/Users/sai pranay/Downloads/IMG-20250524-WA0021.jpg\" \"/c/Users/sai pranay/Desktop/Sai/S_Gift/public/photos/IMG-20250524-WA0021.jpg\")",
+      "Bash(cp \"/c/Users/sai pranay/Downloads/20250704_181203~3.jpg\" \"/c/Users/sai pranay/Desktop/Sai/S_Gift/public/photos/20250704_181203c.jpg\")",
+      "Bash(cp \"/c/Users/sai pranay/Downloads/IMG-20251020-WA0031~2.jpg\" \"/c/Users/sai pranay/Desktop/Sai/S_Gift/public/photos/IMG-20251020-WA0031.jpg\")",
+      "Bash(npm run:*)",
+      "Bash(node -e \"const now = new Date\\(\\); const next = new Date\\(now.getFullYear\\(\\), now.getMonth\\(\\), now.getDate\\(\\), now.getHours\\(\\), now.getMinutes\\(\\)+1, 0, 0\\); console.log\\(next.toISOString\\(\\)\\); console.log\\(next.getTime\\(\\)\\);\")",
+      "Bash(node -e \"const t = new Date\\('2026-04-03T21:00:00.000Z'\\); console.log\\(t.toISOString\\(\\)\\); console.log\\(t.getTime\\(\\)\\);\")",
+      "Bash(node -e \"const t = new Date\\('2026-04-03T20:53:00.000Z'\\); console.log\\(t.toISOString\\(\\)\\); console.log\\(t.getTime\\(\\)\\);\")",
+      "Bash(node -e \"const t = new Date\\('2026-04-02T21:06:00.000Z'\\); console.log\\(t.toISOString\\(\\)\\); console.log\\(t.getTime\\(\\)\\);\")"
     ]
   }
 }

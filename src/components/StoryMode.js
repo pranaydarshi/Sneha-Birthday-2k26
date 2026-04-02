@@ -89,6 +89,53 @@ function useTypewriter(text, active, speed = 38) {
   return displayed;
 }
 
+function useStoryAudio() {
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    // Stop cake birthday song the moment gallery opens
+    if (window._cakeAudio) {
+      window._cakeAudio.pause();
+      window._cakeAudio = null;
+    }
+
+    const a = new Audio("/audio/gallery.mp3");
+    a.loop   = true;
+    a.volume = 0;
+    a.play().catch(() => {});
+    audioRef.current = a;
+
+    // Fade in over 1.5s
+    let v = 0;
+    const fadeIn = setInterval(() => {
+      v = Math.min(v + 0.03, 0.55);
+      if (audioRef.current) audioRef.current.volume = v;
+      if (v >= 0.55) clearInterval(fadeIn);
+    }, 60);
+
+    return () => {
+      clearInterval(fadeIn);
+      // Fade out on unmount
+      const a2 = audioRef.current;
+      if (!a2) return;
+      let vol = a2.volume;
+      const fadeOut = setInterval(() => {
+        vol = Math.max(vol - 0.04, 0);
+        a2.volume = vol;
+        if (vol <= 0) { clearInterval(fadeOut); a2.pause(); }
+      }, 60);
+    };
+  }, []);
+
+  const togglePause = (paused) => {
+    if (!audioRef.current) return;
+    if (paused) audioRef.current.pause();
+    else        audioRef.current.play().catch(() => {});
+  };
+
+  return { togglePause };
+}
+
 export default function StoryMode({ photos, startIndex = 0, onClose }) {
   const [index,   setIndex]   = useState(startIndex);
   const [paused,  setPaused]  = useState(false);
@@ -96,6 +143,7 @@ export default function StoryMode({ photos, startIndex = 0, onClose }) {
   const intervalRef = useRef(null);
   const startTime   = useRef(null);
   const elapsed     = useRef(0);
+  const { togglePause } = useStoryAudio();
 
   const photo   = photos[index];
   const preset  = KB_PRESETS[index % KB_PRESETS.length];
@@ -117,6 +165,9 @@ export default function StoryMode({ photos, startIndex = 0, onClose }) {
     setProgress(0);
     setIndex(i => (i - 1 + photos.length) % photos.length);
   }, [photos.length]);
+
+  // Sync music with pause state
+  useEffect(() => { togglePause(paused); }, [paused]);
 
   // Progress timer
   useEffect(() => {
