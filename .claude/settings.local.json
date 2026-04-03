@@ -30,7 +30,8 @@
       "Bash(node -e \"const now = new Date\\(\\); const next = new Date\\(now.getFullYear\\(\\), now.getMonth\\(\\), now.getDate\\(\\), now.getHours\\(\\), now.getMinutes\\(\\)+1, 0, 0\\); console.log\\(next.toISOString\\(\\)\\); console.log\\(next.getTime\\(\\)\\);\")",
       "Bash(node -e \"const t = new Date\\('2026-04-03T21:00:00.000Z'\\); console.log\\(t.toISOString\\(\\)\\); console.log\\(t.getTime\\(\\)\\);\")",
       "Bash(node -e \"const t = new Date\\('2026-04-03T20:53:00.000Z'\\); console.log\\(t.toISOString\\(\\)\\); console.log\\(t.getTime\\(\\)\\);\")",
-      "Bash(node -e \"const t = new Date\\('2026-04-02T21:06:00.000Z'\\); console.log\\(t.toISOString\\(\\)\\); console.log\\(t.getTime\\(\\)\\);\")"
+      "Bash(node -e \"const t = new Date\\('2026-04-02T21:06:00.000Z'\\); console.log\\(t.toISOString\\(\\)\\); console.log\\(t.getTime\\(\\)\\);\")",
+      "Bash(node -e ':*)"
     ]
   }
 }

@@ -1,5 +1,30 @@
 // 23 photos — one for each year of Sneha's life 🎂
 const photos = [
+  // ── Baby photos ───────────────────────────────────────────
+  {
+    id: 101,
+    src:     "/photos/baby-sneha-cradle.jpg",
+    thumb:   "/photos/baby-sneha-cradle.jpg",
+    alt:     "Baby Sneha in a cradle surrounded by colorful toys",
+    caption: "The tiniest version of her — already surrounded by color and joy 🍼✨",
+    span:    "tall",
+  },
+  {
+    id: 102,
+    src:     "/photos/baby-sneha-birthday.jpg",
+    thumb:   "/photos/baby-sneha-birthday.jpg",
+    alt:     "Little Sneha at her birthday party with garland and banner",
+    caption: "Birthday girl since day one — the tradition started early 🎂🌸",
+    span:    "tall",
+  },
+  {
+    id: 103,
+    src:     "/photos/child-sneha-blue-frock.jpg",
+    thumb:   "/photos/child-sneha-blue-frock.jpg",
+    alt:     "Young Sneha standing in a blue frock, slightly older",
+    caption: "Growing up one adorable outfit at a time 💙",
+    span:    "tall",
+  },
   // ── Column 1 seed ─────────────────────────────────────────
   {
     id: 1,
@@ -25,15 +50,6 @@ const photos = [
     thumb:   "/photos/20241025_181028.jpg",
     alt:     "Sneha in purple kurti, golden hour",
     caption: "Purple in the golden hour 💜",
-    span:    "tall",
-  },
-  // ── Column 4 seed ─────────────────────────────────────────
-  {
-    id: 4,
-    src:     "/photos/20250207_184315.jpg",
-    thumb:   "/photos/20250207_184315.jpg",
-    alt:     "Sneha in floral dress under fairy lights",
-    caption: "Lit up the whole place — the lights helped a little ✨",
     span:    "tall",
   },
   // ── Row 2 ─────────────────────────────────────────────────
@@ -87,11 +103,11 @@ const photos = [
     span:    "tall",
   },
   {
-    id: 11,
-    src:     "/photos/20250301_003637.jpg",
-    thumb:   "/photos/20250301_003637.jpg",
-    alt:     "Sneha walking alone on night road under streetlights",
-    caption: "Some roads look better at night 🌃",
+    id: 21,
+    src:     "/photos/20250704_184053.jpg",
+    thumb:   "/photos/20250704_184053.jpg",
+    alt:     "Sneha walking down a tree-lined path",
+    caption: "The whole road ahead — walking right into it 🌿",
     span:    "tall",
   },
   {
@@ -128,37 +144,12 @@ const photos = [
     span:    "normal",
   },
   {
-    id: 16,
-    src:     "/photos/IMG-20250817-WA0023.jpg",
-    thumb:   "/photos/IMG-20250817-WA0023.jpg",
-    alt:     "Sneha outdoor portrait, soft smile looking down",
-    caption: "Lost in thought and still the prettiest in the frame 🌿",
-    span:    "normal",
-  },
-  // ── Row 5 ─────────────────────────────────────────────────
-  {
     id: 17,
     src:     "/photos/IMG-20250524-WA0021.jpg",
     thumb:   "/photos/IMG-20250524-WA0021.jpg",
     alt:     "Sneha in pink floral salwar posing with hand in hair",
     caption: "Florals and grace — she makes every outfit look like it was made for her 🌸",
     span:    "tall",
-  },
-  {
-    id: 18,
-    src:     "/photos/IMG-20250514-WA0000.jpg",
-    thumb:   "/photos/IMG-20250514-WA0000.jpg",
-    alt:     "Sneha with her mom and sister under marigold decoration",
-    caption: "The two who shaped her into who she is — mom and sis, always 💛🌼",
-    span:    "normal",
-  },
-  {
-    id: 19,
-    src:     "/photos/20241229_174910.jpg",
-    thumb:   "/photos/20241229_174910.jpg",
-    alt:     "Sneha silhouette against dramatic sunset sky",
-    caption: "She watches sunsets like she owns them 🌇",
-    span:    "wide",
   },
   {
     id: 20,
@@ -168,13 +159,22 @@ const photos = [
     caption: "Soft, elegant, and completely radiant — just her being her 🤍💜",
     span:    "tall",
   },
+  // ── Row 5 ─────────────────────────────────────────────────
+  {
+    id: 18,
+    src:     "/photos/IMG-20250514-WA0000.jpg",
+    thumb:   "/photos/IMG-20250514-WA0000.jpg",
+    alt:     "Sneha with her mom and sister under marigold decoration",
+    caption: "The two who shaped her into who she is — mom and sis, always 💛🌼",
+    span:    "normal",
+  },
   // ── Row 6 ─────────────────────────────────────────────────
   {
-    id: 21,
-    src:     "/photos/20250704_184053.jpg",
-    thumb:   "/photos/20250704_184053.jpg",
-    alt:     "Sneha walking down a tree-lined path",
-    caption: "The whole road ahead — walking right into it 🌿",
+    id: 104,
+    src:     "/photos/baby-sneha-with-dad.jpg",
+    thumb:   "/photos/baby-sneha-with-dad.jpg",
+    alt:     "Baby Sneha sleeping in her dad's arms in a red floral dress",
+    caption: "Safe in his arms — where every story begins 👨‍👧❤️",
     span:    "tall",
   },
   {

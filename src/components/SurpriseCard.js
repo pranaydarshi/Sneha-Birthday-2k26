@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import photos from "../data/photos";
 
 const SCRATCH_THRESHOLD = 0.52; // 52% scratched → auto-reveal
 
@@ -178,7 +179,7 @@ export default function SurpriseCard({ active, onDone }) {
                   Your story awaits!
                 </p>
                 <p className="font-body text-xs text-[#2563EB]/80 tracking-wide uppercase">
-                  20 photos · just for you
+                  {photos.length} photos · just for you
                 </p>
               </div>
 
