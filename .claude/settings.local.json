@@ -31,7 +31,8 @@
       "Bash(node -e \"const t = new Date\\('2026-04-03T21:00:00.000Z'\\); console.log\\(t.toISOString\\(\\)\\); console.log\\(t.getTime\\(\\)\\);\")",
       "Bash(node -e \"const t = new Date\\('2026-04-03T20:53:00.000Z'\\); console.log\\(t.toISOString\\(\\)\\); console.log\\(t.getTime\\(\\)\\);\")",
       "Bash(node -e \"const t = new Date\\('2026-04-02T21:06:00.000Z'\\); console.log\\(t.toISOString\\(\\)\\); console.log\\(t.getTime\\(\\)\\);\")",
-      "Bash(node -e ':*)"
+      "Bash(node -e ':*)",
+      "Bash(node audit.js)"
     ]
   }
 }
