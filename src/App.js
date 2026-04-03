@@ -10,7 +10,6 @@ import LetterModal         from "./components/LetterModal";
 import SurpriseCard        from "./components/SurpriseCard";
 import TeaserCard          from "./components/TeaserCard";
 import BowArrow            from "./components/BowArrow";
-import BirthdayMusic       from "./components/BirthdayMusic";
 
 const UNLOCK_TIME = 1775241000000; // Apr 4, 2026 12:00 AM IST
 
@@ -35,14 +34,12 @@ export default function App() {
     localStorage.getItem(LS_CAKE_DONE) === "true"
   );
   const [resetting,     setResetting]     = useState(false);
-  const [playMusic,     setPlayMusic]     = useState(false);
   const [wasReset,      setWasReset]      = useState(false);
 
   const handleUnlocked = () => {
     localStorage.setItem(LS_UNLOCKED, "true");
     setWasReset(false);
     setLocked(false);
-    setPlayMusic(true);
     setTimeout(() => setShowConfetti(true), 300);
     setTimeout(() => setShowConfetti(false), 8700);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -148,7 +145,6 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <BirthdayMusic play={playMusic} />
       {locked && <LockScreen onUnlocked={handleUnlocked} forceSwipe={wasReset} />}
 
       <FallingCelebration active={celebrating} />
